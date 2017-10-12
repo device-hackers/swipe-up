@@ -1,0 +1,62 @@
+BODY {
+    background: white url('../assets/raster.gif') no-repeat;
+}
+
+H3, H4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+H3 {
+    margin-top: 30px;
+}
+
+INPUT {
+    width: 150px;
+    border: 1px solid cadetblue;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+BUTTON {
+    border: 1px solid maroon;
+    margin-left: 5px;
+}
+
+.wrapper {
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+#userAgent {
+    font-size: 12px;
+}
+
+#mailToLink {
+    float: right;
+    top: 50px;
+    right: 10px;
+    margin-left: 5px;
+}
+
+#allReadings {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    position: fixed;
+    padding: 5px;
+}
+
+.browserReadings {
+    border: 1px dashed gray;
+    background: rgba(0,0,0,0.1);
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.browserReadings .highlight {
+    color: royalblue;
+}
+
+.browserReadings .value {
+    color: brown;
+}

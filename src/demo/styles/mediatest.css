@@ -1,0 +1,363 @@
+.metrics {
+    border-spacing: 0;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+.metrics td {
+    border: 1px solid;
+}
+
+td {
+    background: white;
+}
+
+.metrics .header {
+    background: lightblue;
+}
+
+.section TD {
+    text-align: center;
+    background: lightcyan;
+    padding-top: 10px;
+}
+
+/* full-screen */
+:-webkit-full-screen .fullscreen {
+    background: lightgreen;
+}
+
+:-moz-full-screen .fullscreen {
+    background: lightgreen;
+}
+
+:-ms-fullscreen .fullscreen {
+    background: lightgreen;
+}
+
+:fullscreen .fullscreen {
+    background: lightgreen;
+}
+
+
+/* orientation */
+@media (orientation: portrait) {
+    .orientation .port {
+        background: lightgreen;
+    }
+}
+@media (orientation: landscape) {
+    .orientation .land {
+        background: lightgreen;
+    }
+}
+
+
+/* min-aspect-ratio */
+@media (min-aspect-ratio: 5/10) {
+    .minAspectRatio .v05 {
+        background: lightgreen;
+    }
+}
+@media (min-aspect-ratio: 1/1) {
+    .minAspectRatio .v10 {
+        background: lightgreen;
+    }
+}
+@media (min-aspect-ratio: 20/10) {
+    .minAspectRatio .v20 {
+        background: lightgreen;
+    }
+}
+@media (min-aspect-ratio: 50/10) {
+    .minAspectRatio .v50 {
+        background: lightgreen;
+    }
+}
+@media (min-aspect-ratio: 100/10) {
+    .minAspectRatio .v100 {
+        background: lightgreen;
+    }
+}
+
+
+/* max-aspect-ratio */
+@media (max-aspect-ratio: 5/10) {
+    .maxAspectRatio .v05 {
+        background: lightgreen;
+    }
+}
+@media (max-aspect-ratio: 1/1) {
+    .maxAspectRatio .v10 {
+        background: lightgreen;
+    }
+}
+@media (max-aspect-ratio: 20/10) {
+    .maxAspectRatio .v20 {
+        background: lightgreen;
+    }
+}
+@media (max-aspect-ratio: 50/10) {
+    .maxAspectRatio .v50 {
+        background: lightgreen;
+    }
+}
+@media (max-aspect-ratio: 100/10) {
+    .maxAspectRatio .v100 {
+        background: lightgreen;
+    }
+}
+
+
+/* min-width */
+@media (min-width: 100px) {
+    .minWidth .w100 {
+        background: lightgreen;
+    }
+}
+@media (min-width: 300px) {
+    .minWidth .w300 {
+        background: lightgreen;
+    }
+}
+@media (min-width: 500px) {
+    .minWidth .w500 {
+        background: lightgreen;
+    }
+}
+@media (min-width: 700px) {
+    .minWidth .w700 {
+        background: lightgreen;
+    }
+}
+@media (min-width: 1000px) {
+    .minWidth .w1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* max-width */
+@media (max-width: 100px) {
+    .maxWidth .w100 {
+        background: lightgreen;
+    }
+}
+@media (max-width: 300px) {
+    .maxWidth .w300 {
+        background: lightgreen;
+    }
+}
+@media (max-width: 500px) {
+    .maxWidth .w500 {
+        background: lightgreen;
+    }
+}
+@media (max-width: 700px) {
+    .maxWidth .w700 {
+        background: lightgreen;
+    }
+}
+@media (max-width: 1000px) {
+    .maxWidth .w1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* min-height */
+@media (min-height: 100px) {
+    .minHeight .h100 {
+        background: lightgreen;
+    }
+}
+@media (min-height: 300px) {
+    .minHeight .h300 {
+        background: lightgreen;
+    }
+}
+@media (min-height: 500px) {
+    .minHeight .h500 {
+        background: lightgreen;
+    }
+}
+@media (min-height: 700px) {
+    .minHeight .h700 {
+        background: lightgreen;
+    }
+}
+@media (min-height: 1000px) {
+    .minHeight .h1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* max-height */
+@media (max-height: 100px) {
+    .maxHeight .h100 {
+        background: lightgreen;
+    }
+}
+@media (max-height: 300px) {
+    .maxHeight .h300 {
+        background: lightgreen;
+    }
+}
+@media (max-height: 500px) {
+    .maxHeight .h500 {
+        background: lightgreen;
+    }
+}
+@media (max-height: 700px) {
+    .maxHeight .h700 {
+        background: lightgreen;
+    }
+}
+@media (max-height: 1000px) {
+    .maxHeight .h1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* min-resolution */
+@media (min-resolution: 10dpi) {
+    .minResolution .v10 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 50dpi) {
+    .minResolution .v50 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 100dpi) {
+    .minResolution .v100 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 200dpi) {
+    .minResolution .v200 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 300dpi) {
+    .minResolution .v300 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 400dpi) {
+    .minResolution .v400 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 500dpi) {
+    .minResolution .v500 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 1000dpi) {
+    .minResolution .v1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* max-resolution */
+@media (max-resolution: 10dpi) {
+    .maxResolution .v10 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 50dpi) {
+    .maxResolution .v50 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 100dpi) {
+    .maxResolution .v100 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 200dpi) {
+    .maxResolution .v200 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 300dpi) {
+    .maxResolution .v300 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 400dpi) {
+    .maxResolution .v400 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 500dpi) {
+    .maxResolution .v500 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 1000dpi) {
+    .maxResolution .v1000 {
+        background: lightgreen;
+    }
+}
+
+
+/* min-resolution dppx */
+@media (min-resolution: 1dppx) {
+    .minResolutionInDppx .v1 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 2dppx) {
+    .minResolutionInDppx .v2 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 3dppx) {
+    .minResolutionInDppx .v3 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 4dppx) {
+    .minResolutionInDppx .v4 {
+        background: lightgreen;
+    }
+}
+@media (min-resolution: 5dppx) {
+    .minResolutionInDppx .v5 {
+        background: lightgreen;
+    }
+}
+
+
+/* max-resolution dppx */
+@media (max-resolution: 1dppx) {
+    .maxResolutionInDppx .v1 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 2dppx) {
+    .maxResolutionInDppx .v2 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 3dppx) {
+    .maxResolutionInDppx .v3 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 4dppx) {
+    .maxResolutionInDppx .v4 {
+        background: lightgreen;
+    }
+}
+@media (max-resolution: 5dppx) {
+    .maxResolutionInDppx .v5 {
+        background: lightgreen;
+    }
+}

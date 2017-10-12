@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
+
+    <title>Browser UI State demo</title>
+
+    <meta id='viewport' name='viewport'
+          content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'>
+
+    <link rel='stylesheet' href='styles/style.css' />
+    <link rel='stylesheet' href='styles/mediatest.css'>
+
+    <script src='demo.js'></script>
+</head>
+<body>
+    <div id='allReadings'></div>
+    <div class='wrapper'>
+        <h3>Demo of Browser UI State <span id='ver'></span></h3>
+        <a id='mailToLink' href='http://dev-ngm.playtechgaming.com/detect/'>Detect.js</a>
+        <i id='userAgent'></i><br>
+        <span id='userAgentName'></span> / <span id='deviceName'></span><br>
+        <a href="https://github.com/device-hackers/browser-ui-state/">https://github.com/device-hackers/browser-ui-state/</a><br><br>
+        <input placeholder='Tap me to show keyboard'>
+        <button id="refresh">Refresh</button>
+
+        <div class='browserReadings'>
+            <h4>Browser readings:</h4>
+            <span>window.devicePixelRatio = </span>
+            <span id='dpr' class='value'></span><br>
+
+            <span>screen.width x height = </span>
+            <span id='sWH' class='value'></span><br>
+
+            <span>window.innerWidth x innerHeight = </span>
+            <span id='wWH' class='value'></span><br>
+
+            <span>screen.orientation.angle = </span>
+            <span id='screenAngle' class='value'></span><br>
+
+            <span>screen.orientation.type = </span>
+            <span id='screenType' class='value'></span><br>
+
+            <span>html5FullscreenIsAvailable = </span>
+            <span id='html5FullscreenIsAvailable' class='value'></span><br>
+
+            <span>html5FullscreenIsOn = </span>
+            <span id='html5FullscreenIsOn' class='value'></span>
+            <button id='html5FullscreenBtn'>Toggle</button><br>
+        </div>
+        <div class='browserReadings'>
+            <h4>Browser UI State library readings:</h4>
+            <span class='highlight'>BrowserUiState.orientation = </span>
+            <span id='orientation' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.screenAspectRatio = </span>
+            <span id='screenAspectRatio' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.viewportAspectRatio = </span>
+            <span id='viewportAspectRatio' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.delta = </span>
+            <span id='delta' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.deviation = </span>
+            <span id='deviation' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.collapsedThreshold = </span>
+            <span id='collapsedThreshold' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.keyboardThreshold = </span>
+            <span id='keyboardThreshold' class='value'></span><br>
+
+            <span class='highlight'>BrowserUiState.state = </span>
+            <span id='state' class='value'></span>
+        </div>
+
+        <input placeholder='Tap me to show keyboard'>
+        <button id="refresh2">Refresh</button>
+
+        <div class='browserReadings'>
+            <h4>CSS Media Queries:</h4>
+            <table class='metrics'><tbody>
+                <tr class='width'>
+                    <td class='header'>
+                        <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/:fullscreen'>:fullscreen pseudo-class</a>
+                    </td>
+                    <td class='fullscreen'>:fullscreen</td>
+                </tr>
+                <tr class='orientation'>
+                    <td class='header'>orientation</td>
+                    <td class='port'>portrait</td>
+                    <td class='land'>landscape</td>
+                </tr>
+                <tr class='section'><td colspan='6'>aspect-ratio</td></tr>
+                <tr class='minAspectRatio'>
+                    <td class='header'>min-aspect-ratio</td>
+                    <td class='v05'>0.5</td>
+                    <td class='v10'>1.0</td>
+                    <td class='v20'>2.0</td>
+                    <td class='v50'>5.0</td>
+                    <td class='v100'>10.0</td>
+                </tr>
+                <tr class='maxAspectRatio'>
+                    <td class='header'>max-aspect-ratio</td>
+                    <td class='v05'>0.5</td>
+                    <td class='v10'>1.0</td>
+                    <td class='v20'>2.0</td>
+                    <td class='v50'>5.0</td>
+                    <td class='v100'>10.0</td>
+                </tr>
+                <tr class='section'><td colspan='6'>width</td></tr>
+                <tr class='minWidth'>
+                    <td class='header'>min-width</td>
+                    <td class='w100'>100 px</td>
+                    <td class='w300'>300 px</td>
+                    <td class='w500'>500 px</td>
+                    <td class='w700'>700 px</td>
+                    <td class='w1000'>1000 px</td>
+                </tr>
+                <tr class='maxWidth'>
+                    <td class='header'>max-width</td>
+                    <td class='w100'>100 px</td>
+                    <td class='w300'>300 px</td>
+                    <td class='w500'>500 px</td>
+                    <td class='w700'>700 px</td>
+                    <td class='w1000'>1000 px</td>
+                </tr>
+                <tr class='section'><td colspan='6'>height</td></tr>
+                <tr class='minHeight'>
+                    <td class='header'>min-height</td>
+                    <td class='h100'>100 px</td>
+                    <td class='h300'>300 px</td>
+                    <td class='h500'>500 px</td>
+                    <td class='h700'>700 px</td>
+                    <td class='h1000'>1000 px</td>
+                </tr>
+                <tr class='maxHeight'>
+                    <td class='header'>max-height</td>
+                    <td class='h100'>100 px</td>
+                    <td class='h300'>300 px</td>
+                    <td class='h500'>500 px</td>
+                    <td class='h700'>700 px</td>
+                    <td class='h1000'>1000 px</td>
+                </tr>
+                <tr class='section'><td colspan='6'>resolution</td></tr>
+                <tr class='minResolution'>
+                    <td class='header'>min-resolution</td>
+                    <td class='v100'>100 dpi</td>
+                    <td class='v200'>200 dpi</td>
+                    <td class='v300'>300 dpi</td>
+                    <td class='v400'>400 dpi</td>
+                    <td class='v500'>500 dpi</td>
+                </tr>
+                <tr class='maxResolution'>
+                    <td class='header'>max-resolution</td>
+                    <td class='v100'>100 dpi</td>
+                    <td class='v200'>200 dpi</td>
+                    <td class='v300'>300 dpi</td>
+                    <td class='v400'>400 dpi</td>
+                    <td class='v500'>500 dpi</td>
+                </tr>
+                <tr class='section'><td colspan='6'>resolution (dppx)</td></tr>
+                <tr class='minResolutionInDppx'>
+                    <td class='header'>min-resolution</td>
+                    <td class='v1'>1 dppx</td>
+                    <td class='v2'>2 dppx</td>
+                    <td class='v3'>3 dppx</td>
+                    <td class='v4'>4 dppx</td>
+                    <td class='v5'>5 dppx</td>
+                </tr>
+                <tr class='maxResolutionInDppx'>
+                    <td class='header'>max-resolution</td>
+                    <td class='v1'>1 dppx</td>
+                    <td class='v2'>2 dppx</td>
+                    <td class='v3'>3 dppx</td>
+                    <td class='v4'>4 dppx</td>
+                    <td class='v5'>5 dppx</td>
+                </tr>
+            </tbody></table>
+            <i> - aspect-ratio corresponds to viewport aspect ratio (window.innerWidth/window.innerHeight)</i><br>
+            <i> - resolution in dpi tends to be similar to DPR (but slightly smaller) multiplied by x100</i><br>
+            <i> - resolution in dppx is the replacement to dpi and corresponds to DPR</i><br>
+            <i> - device-aspect-ratio, device-width, queries working directly with DPR - are all deprecated, see MDN</i><br>
+        </div>
+    </div>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec ex porttitor, sagittis sapien non, placerat enim. Sed dapibus dapibus pellentesque. Proin blandit massa sem, id faucibus nisl congue ac. Maecenas et elit sodales, pharetra nunc sit amet, ultricies diam. Etiam eget odio nec enim volutpat viverra et nec dui. Maecenas tortor orci, dignissim nec condimentum ac, ornare nec dui. Suspendisse in metus venenatis, finibus lectus et, pulvinar diam. Mauris pulvinar nibh dui, et gravida ex dignissim nec. Nam vitae urna libero.</p>
+
+    <p>Praesent dapibus justo in odio convallis blandit. Mauris quis odio vestibulum, vehicula nibh non, viverra sapien. Phasellus cursus tempus dictum. Mauris libero purus, hendrerit non cursus in, venenatis sed nibh. Fusce vel sodales purus. Nullam eu massa fringilla, cursus tellus vel, fringilla odio. Donec vitae nibh sed mauris lacinia tempus suscipit id massa. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam quis dictum ante, eu malesuada lectus. Ut efficitur bibendum iaculis. Aliquam auctor leo quis laoreet tincidunt.</p>
+
+    <p>Cras at porta magna, vitae convallis leo. Morbi porttitor, lectus ac posuere varius, nulla justo fermentum urna, ornare egestas ipsum leo quis neque. Aliquam efficitur luctus odio. Suspendisse potenti. Praesent neque velit, accumsan vitae egestas ac, aliquam non tellus. Sed ut sodales ipsum. In hac habitasse platea dictumst. In fermentum rhoncus condimentum. Suspendisse potenti. Aliquam erat volutpat. Sed rhoncus scelerisque eleifend. Mauris sit amet dui justo. Maecenas fringilla enim ultricies bibendum scelerisque. Nulla eget odio ultricies, volutpat massa ut, tempus risus. Cras eget sagittis nisl, eget lacinia nisi.</p>
+
+    <p>Sed diam lacus, rutrum nec imperdiet eu, pretium vel ex. Sed consectetur mauris et hendrerit finibus. Fusce mattis tellus nec lectus venenatis venenatis. Proin fringilla metus eget felis tempor rutrum. Duis non convallis leo, quis rhoncus massa. Suspendisse dignissim elementum tellus. Suspendisse maximus ultrices mi vel dapibus. Etiam aliquam in turpis et congue. Nam in euismod dui, vel pulvinar ligula. Donec congue massa eget odio pellentesque gravida. Duis tempus tincidunt ullamcorper. Praesent sit amet venenatis ex. Donec lobortis nisl et luctus sodales.</p>
+
+    <p>Quisque lacinia libero et dolor vulputate, sit amet suscipit nunc pharetra. Mauris ornare aliquet scelerisque. Suspendisse quis nunc id augue ultricies finibus ac sit amet nibh. Praesent venenatis lobortis tortor eu consectetur. Sed fermentum euismod tincidunt. Sed volutpat congue eros, ut pharetra ligula iaculis sed. Praesent sagittis vulputate blandit. Fusce nulla tellus, eleifend sed eros ut, dignissim porta nulla.</p>
+</body>
+</html>

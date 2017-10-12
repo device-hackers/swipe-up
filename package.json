@@ -1,0 +1,42 @@
+{
+  "name": "swipe-up",
+  "version": "1.0.0",
+  "description": "Browser UI State based reference implementation of the 'Swipe Up' functionality required to switch browser to full screen",
+  "main": "./dist/swipe-up.js",
+  "files": [
+    "dist/swipe-up.js",
+    "src"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "test": ""
+  },
+  "author": "TheBit",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/device-hackers/swipe-up.git"
+  },
+  "bugs": {
+    "url": "https://github.com/device-hackers/swipe-up/issues"
+  },
+  "homepage": "https://github.com/device-hackers/swipe-up",
+  "keywords": [
+    "mobile",
+    "browser",
+    "swipe up"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "copy-webpack-plugin": "^4.1.1",
+    "html-webpack-plugin": "^2.29.0",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.9.1"
+  },
+  "dependencies": {
+    "browser-ui-state": "^1.0.3"
+  }
+}
