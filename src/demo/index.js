@@ -1,4 +1,4 @@
-import {BrowserUiState} from 'browser-ui-state'
+import BrowserUiState from 'browser-ui-state'
 import {version} from '../../package.json'
 
 class BrowserUiStateDemo {
@@ -11,8 +11,8 @@ class BrowserUiStateDemo {
         window.addEventListener('load', () => {
             this.updateUi()
 
-            document.getElementById('html5FullscreenBtn').addEventListener('click', event => fscreen.fullscreenElement ?
-                fscreen.exitFullscreen() : fscreen.requestFullscreen(document.documentElement))
+            /*document.getElementById('html5FullscreenBtn').addEventListener('click', event => fscreen.fullscreenElement ?
+                fscreen.exitFullscreen() : fscreen.requestFullscreen(document.documentElement))*/
 
             document.getElementById('refresh').addEventListener('click', event => this.updateUi())
             document.getElementById('refresh2').addEventListener('click', event => this.updateUi())
@@ -42,8 +42,8 @@ class BrowserUiStateDemo {
         const wWH = window.innerWidth + 'x' + window.innerHeight
         const screenAngle = screen.orientation ? screen.orientation.angle : '-'
         const screenType = screen.orientation ? screen.orientation.type : '-'
-        const html5FullscreenIsAvailable = `${fscreen.fullscreenEnabled} ( ${document.fullscreenEnabled} )`
-        const html5FullscreenIsOn = !!fscreen.fullscreenElement
+        //const html5FullscreenIsAvailable = `${fscreen.fullscreenEnabled} ( ${document.fullscreenEnabled} )`
+        //const html5FullscreenIsOn = !!fscreen.fullscreenElement
         const orientation = this.browserUiState.orientation
         const screenAspectRatio = this.browserUiState.screenAspectRatio.toFixed(2)
         const viewportAspectRatio = this.browserUiState.viewportAspectRatio.toFixed(2)
@@ -52,7 +52,7 @@ class BrowserUiStateDemo {
         const collapsedThreshold = this.browserUiState.collapsedThreshold ? `${this.browserUiState.collapsedThreshold}%` : 'null'
         const keyboardThreshold = this.browserUiState.keyboardThreshold ? `${this.browserUiState.keyboardThreshold}%` : 'null'
         const state = this.browserUiState.state
-        document.getElementById('html5FullscreenBtn').disabled = !fscreen.fullscreenEnabled
+        //document.getElementById('html5FullscreenBtn').disabled = !fscreen.fullscreenEnabled
 
         write('ver', version)
         write('allReadings', `${dpr} / ${sWH} / ${wWH} / ${screenAngle} / ${screenType} / ` +
@@ -65,8 +65,8 @@ class BrowserUiStateDemo {
         write('wWH', wWH)
         write('screenAngle', screenAngle)
         write('screenType', screenType)
-        write('html5FullscreenIsAvailable', html5FullscreenIsAvailable)
-        write('html5FullscreenIsOn', html5FullscreenIsOn)
+        //write('html5FullscreenIsAvailable', html5FullscreenIsAvailable)
+        //write('html5FullscreenIsOn', html5FullscreenIsOn)
 
         write('orientation', orientation)
         write('screenAspectRatio', screenAspectRatio)
