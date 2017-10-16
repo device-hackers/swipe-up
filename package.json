@@ -1,42 +1,48 @@
 {
   "name": "swipe-up",
   "version": "1.0.0",
-  "description": "Browser UI State based reference implementation of the 'Swipe Up' functionality required to switch browser to full screen",
-  "main": "./dist/swipe-up.js",
+  "description": "Reference 'Swipe Up' functionality implementation based on 'Browser Ui State' intended to provide a way to expand browser to full screen state",
+  "main": "dist/swipe-up.js",
+  "module": "src/swipe-up",
   "files": [
     "dist/swipe-up.js",
     "src"
   ],
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack",
-    "test": ""
+    "build": "webpack && npm run test",
+    "test": "./node_modules/.bin/cucumber.js --compiler js:babel-core/register",
+    "prepare": "npm run build"
   },
-  "author": "TheBit",
+  "author": "Andriy Halyasovskyy (https://github.com/TheBit)",
+  "contributors": [
+    "Volodymyr Vyshko (https://github.com/vyshkov)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/device-hackers/swipe-up.git"
+    "url": "https://github.com/device-hackers/swipe-up.git"
   },
-  "bugs": {
-    "url": "https://github.com/device-hackers/swipe-up/issues"
-  },
+  "bugs": "https://github.com/device-hackers/swipe-up/issues",
   "homepage": "https://github.com/device-hackers/swipe-up",
   "keywords": [
     "mobile",
     "browser",
-    "swipe up"
+    "swipe-up",
+    "fullscreen"
   ],
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.6.0",
     "copy-webpack-plugin": "^4.1.1",
+    "cucumber": "^3.0.5",
     "html-webpack-plugin": "^2.29.0",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^2.9.2"
   },
   "dependencies": {
-    "browser-ui-state": "^1.0.4"
+    "browser-ui-state": "^1.1.16",
+    "chai": "^4.1.2"
   }
 }

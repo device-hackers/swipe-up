@@ -1,5 +1,6 @@
 import BrowserUiState from 'browser-ui-state'
-import {version} from '../../package.json'
+import {version, dependencies} from '../../package.json'
+import SwipeUp from "../swipe-up/index";
 
 class BrowserUiStateDemo {
     constructor() {
@@ -7,15 +8,16 @@ class BrowserUiStateDemo {
             'LANDSCAPE' : 'PORTRAIT'
 
         this.browserUiState = new BrowserUiState(initialOrientation, window)
+        this.swipeUp = new SwipeUp()
 
         window.addEventListener('load', () => {
             this.updateUi()
 
-            /*document.getElementById('html5FullscreenBtn').addEventListener('click', event => fscreen.fullscreenElement ?
-                fscreen.exitFullscreen() : fscreen.requestFullscreen(document.documentElement))*/
+            document.getElementById('html5FullscreenBtn').addEventListener('click', event => this.browserUiState.fscreen.fullscreenElement ?
+                this.browserUiState.fscreen.exitFullscreen() : this.browserUiState.fscreen.requestFullscreen(document.documentElement))
 
             document.getElementById('refresh').addEventListener('click', event => this.updateUi())
-            document.getElementById('refresh2').addEventListener('click', event => this.updateUi())
+            document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
         })
 
         const resizeHandler = () => {
@@ -32,50 +34,72 @@ class BrowserUiStateDemo {
     }
 
     write(elementId, text) {
-        document.getElementById(elementId).innerText = text
+        document.getElementById(elementId).innerHTML = text
+    }
+
+    write2(elementClassName, text) {
+        document.getElementsByClassName(elementClassName)[0].innerHTML = text
     }
 
     updateUi() {
         const write = this.write
-        const dpr = window.devicePixelRatio
+        const write2 = this.write2
+        const ownVersion = version
+        const browserUiStateVersion = dependencies['browser-ui-state'].substr(1)
+        const dpr = +window.devicePixelRatio.toFixed(2)
         const sWH = screen.width + 'x' + screen.height
         const wWH = window.innerWidth + 'x' + window.innerHeight
-        const screenAngle = screen.orientation ? screen.orientation.angle : '-'
-        const screenType = screen.orientation ? screen.orientation.type : '-'
-        //const html5FullscreenIsAvailable = `${fscreen.fullscreenEnabled} ( ${document.fullscreenEnabled} )`
-        //const html5FullscreenIsOn = !!fscreen.fullscreenElement
-        const orientation = this.browserUiState.orientation
-        const screenAspectRatio = this.browserUiState.screenAspectRatio.toFixed(2)
-        const viewportAspectRatio = this.browserUiState.viewportAspectRatio.toFixed(2)
-        const delta = this.browserUiState.delta.toFixed(2)
+        const screenType = screen.orientation ? screen.orientation.type.replace(/(.).*-(.).*/, '$1$2') : '-'
+        const orientation = this.browserUiState.orientation[0]
+        const html5FullscreenIsAvailable = this.browserUiState.fscreen.fullscreenEnabled ? 'Y' : 'N'
+        const html5FullscreenIsAvailable2 = document.fullscreenEnabled ? 'Y' : typeof document.fullscreenEnabled != 'undefined' ? 'N' : 'U'
+        const html5FullscreenIsOn = !!this.browserUiState.fscreen.fullscreenElement ? 'Y' : 'N'
+        const standalone = window.navigator.standalone ? 'Y' : typeof window.navigator.standalone != 'undefined' ? 'N' : 'U'
+        const collapsedThreshold = `${this.browserUiState.collapsedThreshold}%`
         const deviation = `${this.browserUiState.deviation.toFixed(2)}%`
-        const collapsedThreshold = this.browserUiState.collapsedThreshold ? `${this.browserUiState.collapsedThreshold}%` : 'null'
-        const keyboardThreshold = this.browserUiState.keyboardThreshold ? `${this.browserUiState.keyboardThreshold}%` : 'null'
-        const state = this.browserUiState.state
-        //document.getElementById('html5FullscreenBtn').disabled = !fscreen.fullscreenEnabled
+        const keyboardThreshold = `${this.browserUiState.keyboardThreshold}%`
+        const state = this.browserUiState.state.toLowerCase()
+        const userAgent = window.navigator.userAgent
+        const userAgentName = this.browserUiState._userAgentDetector.userAgent ? this.browserUiState._userAgentDetector.userAgent.toLowerCase() : '...'
+        const deviceName = this.browserUiState._provider._device ? this.browserUiState._provider._device.toLowerCase() : '...'
+        document.getElementById('html5FullscreenBtn').disabled = !this.browserUiState.fscreen.fullscreenEnabled
 
         write('ver', version)
-        write('allReadings', `${dpr} / ${sWH} / ${wWH} / ${screenAngle} / ${screenType} / ` +
-            `${html5FullscreenIsAvailable} / ${html5FullscreenIsOn} / ${deviation} / ${state}`)
-        write('userAgent', window.navigator.userAgent)
-        write('userAgentName', this.browserUiState._userAgentDetector.userAgent ? this.browserUiState._userAgentDetector.userAgent : '...')
-        write('deviceName', this.browserUiState._provider._device ? this.browserUiState._provider._device : '...')
-        write('dpr', dpr)
-        write('sWH', sWH)
-        write('wWH', wWH)
-        write('screenAngle', screenAngle)
-        write('screenType', screenType)
-        //write('html5FullscreenIsAvailable', html5FullscreenIsAvailable)
-        //write('html5FullscreenIsOn', html5FullscreenIsOn)
+        write2('debugWidget', `v${ownVersion} : v${browserUiStateVersion} : ${dpr} : ${sWH} : ${wWH} : ` +
+            `{${screenType} : ${orientation}} : [${html5FullscreenIsAvailable} (${html5FullscreenIsAvailable2}) : ` +
+            `${html5FullscreenIsOn}] : ${standalone} : ${collapsedThreshold} : <b>${deviation}</b> : ${keyboardThreshold} : ` +
+            `${state}<div style="font-size: 10px">${userAgentName} : ${deviceName} : ${userAgent}</div>`)
+        write('userAgent', userAgent)
+        write('userAgentName', userAgentName)
+        write('deviceName', deviceName)
 
-        write('orientation', orientation)
-        write('screenAspectRatio', screenAspectRatio)
-        write('viewportAspectRatio', viewportAspectRatio)
-        write('delta', delta)
-        write('deviation', deviation)
-        write('collapsedThreshold', collapsedThreshold)
-        write('keyboardThreshold', keyboardThreshold)
-        write('state', state)
+        //buttons: [keyboard] [refresh] [fullscreen] [lock] [disable] [email]
+    }
+
+    toggleViewport() {
+        if (!ScalingReport.scaleFactor()) {
+            ViewportManager.init() //init if not initialized
+        }
+
+        let viewport = document.getElementById('meta-viewport')
+
+        if (viewport.dataset.viewportType === 'modern') {
+            this.setViewportLegacy(ScalingReport.scaleFactor())
+            viewport.dataset.viewportType = 'legacy'
+        } else {
+            this.setViewportModern()
+            viewport.dataset.viewportType = 'modern'
+        }
+    }
+
+    setViewportLegacy(scaleFactor) {
+        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, initial-scale=${scaleFactor}, ` +
+            `minimum-scale=${scaleFactor}, maximum-scale=${scaleFactor}`)
+    }
+
+    setViewportModern() {
+        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, width=device-width, ` +
+            `initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0`)
     }
 }
 

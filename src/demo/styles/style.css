@@ -39,11 +39,13 @@ BUTTON {
     margin-left: 5px;
 }
 
-#allReadings {
+.debugWidget {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     position: fixed;
+    top: 5px;
     padding: 5px;
+    font-size: 14px;
 }
 
 .browserReadings {
