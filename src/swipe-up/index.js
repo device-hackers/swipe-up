@@ -22,6 +22,7 @@ class SwipeUp {
             } else {
                 this._swipeUpOverlay.style.display = 'none'
             }
+            this._debugWidget.update()
         }
 
         //TODO add request animation frame, see https://developer.mozilla.org/en-US/docs/Web/Events/resize
