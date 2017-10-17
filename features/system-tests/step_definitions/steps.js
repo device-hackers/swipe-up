@@ -26,6 +26,10 @@ defineSupportCode(function(context) {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }
             }
         },
+        localStorage: {
+            getItem(item) { /*NOOP*/ },
+            setItem(item, value) { /*NOOP*/ }
+        },
         addEventListener(type, listener, useCapture) { /*NOOP*/ },
         dispatchEvent(event) { /*NOOP*/ }
     }

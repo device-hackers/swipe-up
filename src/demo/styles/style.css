@@ -50,6 +50,55 @@ BUTTON {
     display: none;
 }
 
+.debugUserAgent {
+    font-size: 10px
+}
+
+.debugButtons {
+    margin-top: 5px;
+    display: flex;
+}
+
+
+.debugButtons button {
+    background: transparent url('../assets/email.png') no-repeat top;
+    border: 1px solid silver;
+    height: 45px;
+    width: 45px;
+    line-height: 75px;
+    color: white;
+    font-size: 10px;
+    padding: 0;
+    flex: 1 1 auto;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*https://www.flaticon.com/free-icon/keyboard_181827#term=keyboard&page=1&position=32*/
+.debugButtons button.keyboard {
+    background-image: url('../assets/keyboard.png');
+}
+
+.debugButtons button.refresh {
+    background-image: url('../assets/refresh.png');
+}
+
+.debugButtons button.fullscreen {
+    background-image: url('../assets/fullscreen-enter.png');
+}
+
+.debugButtons button.lock {
+    background-image: url('../assets/lock.png');
+}
+
+.debugButtons button.email {
+    background-image: url('../assets/email.png');
+}
+
+.debugButtons button.disable {
+    background-image: url('../assets/remove.png');
+}
+
 .swipeUpOverlay {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
