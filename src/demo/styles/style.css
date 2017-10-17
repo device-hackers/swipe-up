@@ -44,10 +44,28 @@ BUTTON {
     color: white;
     position: fixed;
     top: 5px;
+    left: 5px;
+    right: 5px;
     padding: 5px;
     font-size: 12px;
     z-index: 1000;
     display: none;
+}
+
+.debugWidgetCloseBtn {
+    position: absolute;
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 24px;
+    right: 0;
+    top: 0;
+    padding: 0 5px 5px 5px;
+    line-height: 18px;
+}
+
+.debugAllReadings{
+    margin-right: 10px;
 }
 
 .debugUserAgent {
@@ -58,7 +76,6 @@ BUTTON {
     margin-top: 5px;
     display: flex;
 }
-
 
 .debugButtons button {
     background: transparent url('../assets/email.png') no-repeat top;
@@ -72,6 +89,14 @@ BUTTON {
     flex: 1 1 auto;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.inputForKeyboard {
+    width: 1px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 /*https://www.flaticon.com/free-icon/keyboard_181827#term=keyboard&page=1&position=32*/

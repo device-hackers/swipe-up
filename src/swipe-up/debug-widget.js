@@ -8,6 +8,11 @@ class DebugWidget {
         this._debugWidget = document.createElement('div')
         this._debugWidget.className = 'debugWidget'
 
+        this._debugWidgetCloseBtn = document.createElement('button')
+        this._debugWidgetCloseBtn.className = 'debugWidgetCloseBtn'
+        this._debugWidgetCloseBtn.innerHTML = 'x'
+        this._debugWidget.appendChild(this._debugWidgetCloseBtn)
+
         this._debugAllReadings = document.createElement('div')
         this._debugAllReadings.className = 'debugAllReadings'
         this._debugWidget.appendChild(this._debugAllReadings)
@@ -19,12 +24,13 @@ class DebugWidget {
         this._debugButtons = document.createElement('div')
         this._debugButtons.className = 'debugButtons'
         this._debugButtons.innerHTML =
-            `<button class="keyboard">keyboard</button>` +
-            `<button class="refresh">refresh</button>` +
-            `<button class="fullscreen">fullscreen</button>` +
-            `<button class="lock">lock</button>` +
-            `<button class="email">email</button>` +
-            `<button class="disable">disable</button>`
+            `<input class='inputForKeyboard' tabindex='0'>` +
+            `<button class='keyboard'>keyboard</button>` +
+            `<button class='refresh'>refresh</button>` +
+            `<button class='fullscreen'>fullscreen</button>` +
+            `<button class='lock'>lock</button>` +
+            `<button class='email'>email</button>` +
+            `<button class='disable'>disable</button>`
         let swipeUpDisabled = (this._win.localStorage.getItem('SwipeUp._disabled') === 'true')
         this._debugWidget.appendChild(this._debugButtons)
 
@@ -37,8 +43,12 @@ class DebugWidget {
             this._win.document.getElementsByClassName('disable')[0].style.backgroundImage = 'url("assets/add.png")'
         }
 
+        this._win.document.getElementsByClassName('debugWidgetCloseBtn')[0].addEventListener('click', event =>
+            this.hide()
+        )
+
         this._win.document.getElementsByClassName('keyboard')[0].addEventListener('click', event =>
-            this._win.document.getElementById('myInput').focus()
+            this._win.document.getElementsByClassName('inputForKeyboard')[0].focus()
         )
 
         this._win.document.getElementsByClassName('refresh')[0].addEventListener('click', event =>
@@ -66,28 +76,30 @@ class DebugWidget {
         }
 
         this._win.document.getElementsByClassName('email')[0].addEventListener('click', event => {
-            var promptText = prompt("Please enter your device model", '')
-            var deviceInfoToInclude = promptText
-            var navigatorInfo = ""
+            let promptText = prompt('Please enter your device and browser name', '')
+            let deviceInfoToInclude = promptText
+            let navigatorInfo = ''
 
-            for (var prop in this._win.navigator) {
-                if (!(this._win.navigator[prop] instanceof Function) && !(this._win.navigator[prop] instanceof Object)) {
-                    navigatorInfo += "navigator." + prop + " : " + this._win.navigator[prop] + "\n"
+            for (let prop in this._win.navigator) {
+                if (!(this._win.navigator[prop] instanceof Function) &&
+                    !(this._win.navigator[prop] instanceof Object)) {
+                    navigatorInfo += `navigator.${prop} : ${this._win.navigator[prop]}\n`
                 }
             }
 
-            var generatedLink = "subject=[SwipeUp] " +
-                deviceInfoToInclude +
-                "'&body=" + this._win.navigator.userAgent + "\n\n" +
-                "screen.width x height : " + this._win.screen.width + "x" + this._win.screen.height + "\n" +
-                "window.innerWidth x innerHeight : " + this._win.innerWidth + "x" + this._win.innerHeight + "\n" +
-                "window.devicePixelRatio : " + this._win.devicePixelRatio + "\n" +
-                "window.navigator.standalone : " + this._win.navigator.standalone + "\n" +
-                "window.orientation : " + this._win.orientation + "\n\n" +
-                "navigator.javaEnabled() : " + this._win.navigator.javaEnabled() + "\n" +
-                navigatorInfo;
+            let generatedLink =
+                `subject=[SwipeUp] ${deviceInfoToInclude}` +
+                `&body=${this._win.navigator.userAgent}\n\n` +
+                `window.devicePixelRatio : ${this._win.devicePixelRatio}\n` +
+                `screen.width x height : ${this._win.screen.width} x ${this._win.screen.height}\n` +
+                `window.innerWidth x innerHeight : ${this._win.innerWidth} x ${this._win.innerHeight}\n` +
+                `window.navigator.standalone : ${this._win.navigator.standalone}\n` +
+                `window.orientation : ${this._win.orientation}\n\n` +
+                `navigator.javaEnabled() : ${this._win.navigator.javaEnabled()}\n` +
+                `${navigatorInfo}`
 
-            this._win.location.href = "mailto:detect.js.org@gmail.com?" + encodeEmailCorrectly(generatedLink, this._win);
+            this._win.location.href = `mailto:detect.js.org@gmail.com?` +
+                `${encodeEmailCorrectly(generatedLink, this._win)}`
         })
 
         this._win.document.getElementsByClassName('disable')[0].addEventListener('click', event => {

@@ -11,10 +11,6 @@ class BrowserUiStateDemo {
             this.updateUi()
             this.swipeUp.showDebugWidget()
 
-            document.getElementById('html5FullscreenBtn').addEventListener('click', event => this.swipeUp.browserUiState.fscreen.fullscreenElement ?
-                this.swipeUp.browserUiState.fscreen.exitFullscreen() : this.swipeUp.browserUiState.fscreen.requestFullscreen(document.documentElement))
-
-            document.getElementById('refresh').addEventListener('click', event => this.updateUi())
             document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
         })
@@ -41,14 +37,11 @@ class BrowserUiStateDemo {
         const userAgent = window.navigator.userAgent
         const userAgentName = this.swipeUp.browserUiState._userAgentDetector.userAgent ? this.swipeUp.browserUiState._userAgentDetector.userAgent.toLowerCase() : '...'
         const deviceName = this.swipeUp.browserUiState._provider._device ? this.swipeUp.browserUiState._provider._device.toLowerCase() : '...'
-        document.getElementById('html5FullscreenBtn').disabled = !this.swipeUp.browserUiState.fscreen.fullscreenEnabled
 
         write('ver', version)
         write('userAgent', userAgent)
         write('userAgentName', userAgentName)
         write('deviceName', deviceName)
-
-        //buttons: [keyboard] [refresh] [fullscreen] [lock] [disable] [email]
     }
 
     toggleViewport() {
