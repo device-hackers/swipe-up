@@ -41,6 +41,7 @@ BUTTON {
 
 .debugWidget {
     background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid black;
     color: white;
     position: fixed;
     top: 5px;
@@ -68,6 +69,13 @@ BUTTON {
     margin-right: 10px;
 }
 
+.state {
+    border: 1px solid silver;
+    font-weight: bold;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 .debugUserAgent {
     font-size: 10px
 }
@@ -89,6 +97,10 @@ BUTTON {
     flex: 1 1 auto;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.debugButtons button.disabled {
+    color: silver;
 }
 
 .inputForKeyboard {

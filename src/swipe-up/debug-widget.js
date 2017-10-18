@@ -31,17 +31,27 @@ class DebugWidget {
             `<button class='lock'>lock</button>` +
             `<button class='email'>email</button>` +
             `<button class='disable'>disable</button>`
-        let swipeUpDisabled = (this._win.localStorage.getItem('SwipeUp._disabled') === 'true')
+
         this._debugWidget.appendChild(this._debugButtons)
-
         this.update()
-
         this._win.document.body.appendChild(this._debugWidget)
+
+        let swipeUpDisabled = (this._win.localStorage.getItem('SwipeUp._disabled') === 'true')
 
         if (swipeUpDisabled) {
             this._win.document.getElementsByClassName('disable')[0].innerHTML = 'enable'
             this._win.document.getElementsByClassName('disable')[0].style.backgroundImage = 'url("assets/add.png")'
         }
+
+        if (!this._browserUiState.fscreen.fullscreenEnabled) {
+            this._win.document.getElementsByClassName('fullscreen')[0].classList.add('disabled')
+        }
+
+        if (!isModernLockScreenSupported(this._win) && !isLegacyLockScreenSupported(this._win)) {
+            this._win.document.getElementsByClassName('lock')[0].classList.add('disabled')
+        }
+
+        //Click handlers:
 
         this._win.document.getElementsByClassName('debugWidgetCloseBtn')[0].addEventListener('click', event =>
             this.hide()
@@ -67,12 +77,63 @@ class DebugWidget {
             }
         })
 
-        function encodeEmailCorrectly(generatedLink, win) {
-            if (/(?:baidubrowser|bdbrowser)/i.test(win.navigator.userAgent)) {
-                return encodeURIComponent(generatedLink);
+        this._win.document.getElementsByClassName('lock')[0].addEventListener('click', event => {
+            let orientationToLockTo = this._browserUiState.orientation === 'LANDSCAPE' ? 'portrait' : 'landscape'
+            let self = this._win.document.getElementsByClassName('lock')[0]
+
+            if (isModernLockScreenSupported(this._win)) {
+                lockModern(this._win, self, orientationToLockTo)
             } else {
-                return encodeURI(generatedLink);
+                lockLegacy(this._win, self, orientationToLockTo)
             }
+        })
+
+        function isModernLockScreenSupported(win) {
+            return win.screen.orientation && win.screen.orientation.lock
+        }
+
+        function isLegacyLockScreenSupported(win) {
+            return win.screen.lockOrientation || win.screen.mozLockOrientation || win.screen.msLockOrientation
+        }
+
+        function lockModern(win, self, orientationToLockTo) {
+            if (self.innerHTML === 'lock') {
+                win.screen.orientation.lock(orientationToLockTo)
+                    .then(() => setLocked(self))
+                    .catch((err) => console.error('Orientation lock failed: ', err))
+            } else {
+                win.screen.orientation.unlock()
+                setUnlocked(self)
+            }
+        }
+
+        function lockLegacy(win, self, orientationToLockTo) {
+            let lockOrientation = win.screen.lockOrientation || win.screen.mozLockOrientation || win.screen.msLockOrientation
+            let unlockOrientation = win.screen.unlockOrientation || win.screen.mozUnlockOrientation || win.screen.msUnlockOrientation
+
+            if (self.innerHTML === 'lock' && lockOrientation(orientationToLockTo)) {
+                setLocked(self)
+            } else {
+                console.error('Orientation lock failed')
+            }
+
+            if (self.innerHTML === 'unlock' && unlockOrientation()) {
+                setUnlocked(self)
+            } else {
+                console.error('Orientation unlock failed')
+            }
+        }
+
+        function setLocked(self) {
+            console.log('Orientation was locked')
+            self.innerHTML = 'unlock'
+            self.style.backgroundImage = 'url("assets/unlock.png")'
+        }
+
+        function setUnlocked(self) {
+            console.log('Orientation was unlocked')
+            self.innerHTML = 'lock'
+            self.style.backgroundImage = 'url("assets/lock.png")'
         }
 
         this._win.document.getElementsByClassName('email')[0].addEventListener('click', event => {
@@ -99,8 +160,16 @@ class DebugWidget {
                 `${navigatorInfo}`
 
             this._win.location.href = `mailto:detect.js.org@gmail.com?` +
-                `${encodeEmailCorrectly(generatedLink, this._win)}`
+                `${encodeEmailCorrectly(generatedLink, this._win.navigator.userAgent)}`
         })
+
+        function encodeEmailCorrectly(generatedLink, userAgent) {
+            if (/(?:baidubrowser|bdbrowser)/i.test(userAgent)) {
+                return encodeURIComponent(generatedLink);
+            } else {
+                return encodeURI(generatedLink);
+            }
+        }
 
         this._win.document.getElementsByClassName('disable')[0].addEventListener('click', event => {
             let self = this._win.document.getElementsByClassName('disable')[0]
@@ -108,11 +177,13 @@ class DebugWidget {
             if (self.innerHTML.indexOf('disable') !== -1) {
                 this._win.localStorage.setItem('SwipeUp._disabled', 'true')
                 swipeUp.disable()
+                this._debugWidget.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
                 self.innerHTML = 'enable'
                 self.style.backgroundImage = 'url("assets/add.png")'
             } else {
                 this._win.localStorage.setItem('SwipeUp._disabled', 'false')
                 swipeUp.enable()
+                this._debugWidget.style.backgroundColor = 'initial'
                 self.innerHTML = 'disable'
                 self.style.backgroundImage = 'url("assets/remove.png")'
             }
@@ -121,6 +192,10 @@ class DebugWidget {
 
     update() {
         if (this._debugWidget.style.display === 'none') return
+
+        this._debugWidget.style.backgroundColor = this._browserUiState.state === 'COLLAPSED' ?
+                                                    'initial' : 'rgba(0, 0, 0, 0.5)'
+
         const ownVersion = version
         const browserUiStateVersion = dependencies['browser-ui-state'].substr(1)
         const devicePixelRatio = +this._win.devicePixelRatio.toFixed(2)
@@ -139,7 +214,6 @@ class DebugWidget {
         const userAgent = this._win.navigator.userAgent
         const userAgentName = this._browserUiState._userAgentDetector.userAgent ? this._browserUiState._userAgentDetector.userAgent.toLowerCase() : '...'
         const deviceName = this._browserUiState._provider._device ? this._browserUiState._provider._device.toLowerCase() : '...'
-        //document.getElementById('html5FullscreenBtn').disabled = !this._browserUiState.fscreen.fullscreenEnabled
 
         this._debugAllReadings.innerHTML =
             `v${ownVersion} :` +
@@ -156,7 +230,7 @@ class DebugWidget {
             `${collapsedThreshold} : ` +
             `<b>${deviation}</b> : ` +
             `${keyboardThreshold} : ` +
-            `<b>${state}</b>`
+            `<span class='state'>${state}</span>`
 
         this._debugUserAgent.innerHTML =
             `${userAgentName} : ` +
@@ -166,6 +240,8 @@ class DebugWidget {
 
     show() {
         this._debugWidget.style.display = 'block'
+        this._debugWidget.style.backgroundColor = this._browserUiState.state === 'COLLAPSED' ?
+            'initial' : 'rgba(0, 0, 0, 0.5)'
     }
 
     hide() {
@@ -173,9 +249,11 @@ class DebugWidget {
     }
 
     toggle() {
-        this._debugWidget.style.display === 'block' ?
-            this._debugWidget.style.display = 'none' :
-            this._debugWidget.style.display = 'block'
+        if (this._debugWidget.style.display === 'block') {
+            this.hide()
+        } else {
+            this.show()
+        }
     }
 }
 
