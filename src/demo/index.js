@@ -1,7 +1,7 @@
 import {version, dependencies} from '../../package.json'
 import SwipeUp from "../swipe-up/index";
 
-class BrowserUiStateDemo {
+class SwipeUpDemo {
     constructor() {
         let initialOrientation = window.innerWidth > window.innerHeight ? 'LANDSCAPE' : 'PORTRAIT'
 
@@ -75,4 +75,4 @@ class BrowserUiStateDemo {
     }
 }
 
-export default new BrowserUiStateDemo()
+export default new SwipeUpDemo()
