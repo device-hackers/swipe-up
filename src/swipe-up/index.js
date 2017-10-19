@@ -17,7 +17,7 @@ class SwipeUp {
 
         const resizeHandler = () => {
             this._showOrHide()
-            this._debugWidget.update()
+            this._debugWidgetContainer.update()
         }
 
         //TODO add request animation frame, see https://developer.mozilla.org/en-US/docs/Web/Events/resize
@@ -47,24 +47,24 @@ class SwipeUp {
     }
 
     showDebugWidget() {
-        if (!this._debugWidget) {
-            this._debugWidget = new DebugWidget(this)
+        if (!this._debugWidgetContainer) {
+            this._debugWidgetContainer = new DebugWidget(this)
         }
-        this._debugWidget.show()
+        this._debugWidgetContainer.show()
     }
 
     hideDebugWidget() {
-        if (!this._debugWidget) {
-            this._debugWidget = new DebugWidget(this)
+        if (!this._debugWidgetContainer) {
+            this._debugWidgetContainer = new DebugWidget(this)
         }
-        this._debugWidget.hide()
+        this._debugWidgetContainer.hide()
     }
 
     toggleDebugWidget() {
-        if (!this._debugWidget) {
-            this._debugWidget = new DebugWidget(this)
+        if (!this._debugWidgetContainer) {
+            this._debugWidgetContainer = new DebugWidget(this)
         }
-        this._debugWidget.toggle()
+        this._debugWidgetContainer.toggle()
     }
 }
 
