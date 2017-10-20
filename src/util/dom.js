@@ -1,15 +1,7 @@
 function Wrap(ref) {
     this.ref = ref
-}
-
-//Just pipeline
-Wrap.prototype.classList = function (className) {
-    if (this.ref) return this.ref.classList
-}
-
-//Just pipeline
-Wrap.prototype.style = function () {
-    if (this.ref) return this.ref.style
+    Wrap.prototype.classList = ref ? ref.classList : null
+    Wrap.prototype.style = ref ? ref.style : null
 }
 
 //Just pipeline

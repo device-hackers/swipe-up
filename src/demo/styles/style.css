@@ -124,10 +124,6 @@ BUTTON {
     background-image: url('../assets/fullscreen-enter.png');
 }
 
-.debugButtons button.lock {
-    background-image: url('../assets/lock.png');
-}
-
 .debugButtons button.email {
     background-image: url('../assets/email.png');
 }
