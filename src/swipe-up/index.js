@@ -7,6 +7,16 @@ class SwipeUp {
         this._win = win
         this.browserUiState = new BrowserUiState(initialOrientation, this._win)
 
+        let quickTapDetected = 0
+        let timerId = null
+        let bottomRightTouched
+        let topLeftTouched3Times
+
+        let isTopLeftCornerTouched = (touch) => touch.clientX <= 100 && touch.clientY <= 100
+
+        let isBottomRightCornerTouched = (touch) =>
+            touch.clientX >= win.innerWidth - 100 && touch.clientY >= win.innerHeight - 100
+
         this._win.addEventListener('load', () => {
             this._swipeUpOverlay = document.createElement('div')
             this._swipeUpOverlay.className = 'swipeUpOverlay'
@@ -14,6 +24,56 @@ class SwipeUp {
             this._win.document.body.appendChild(this._swipeUpOverlay)
 
             this._showOrHide()
+
+            this._swipeUpOverlay.addEventListener('touchstart', process_touchstart.bind(this), false);
+
+            function process_touchstart(event) {
+                bottomRightTouched = topLeftTouched3Times = false
+
+                switch (event.touches.length) {
+                    case 1: handle_one_touch(event); break;
+                    case 2: handle_two_touches(event, this); break;
+                    default: console.warn('not 2 touches', event); break;
+                }
+            }
+
+            function handle_one_touch(event) {
+                //console.log('handle_one_touch: ', event)
+
+                process_touch(event.touches[0]);
+            }
+
+            function handle_two_touches(event, swipeup) {
+                console.log('handle_two_touches: ', event)
+
+                for (let i=0; i < event.touches.length; i++) {
+                    process_touch(event.touches[i]);
+                }
+
+                if (topLeftTouched3Times && bottomRightTouched) {
+                    swipeup.showDebugWidget()
+                }
+            }
+
+            function process_touch(touch) {
+                if (isTopLeftCornerTouched(touch)) {
+                    quickTapDetected++
+                    console.log(`top left corner touched (${quickTapDetected}): `, touch)
+
+                    if (timerId) clearTimeout(timerId)
+                    timerId = setTimeout(() => quickTapDetected = 0, 250)
+
+                    if (quickTapDetected >= 3) {
+                        console.warn('3+ quick taps detected!', quickTapDetected)
+                        topLeftTouched3Times = true
+                    }
+                } else if (isBottomRightCornerTouched(touch)) {
+                    console.log('bottom right corner touched: ', touch)
+                    bottomRightTouched = true
+                } else {
+                    console.log('other touched: ', touch)
+                }
+            }
         })
 
         const resizeHandler = () => {

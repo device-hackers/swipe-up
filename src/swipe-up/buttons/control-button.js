@@ -4,6 +4,7 @@ export default class ControlButton {
     constructor(selfName, content) {
         this._selfName = selfName
         $('.debugButtons').append(content ? content : `<button class='${selfName}'>${selfName}</button>`)
+        //TODO replace innerHTML to DOM creation - in this way won't be needed to use timer for click handler
     }
 
     /**
