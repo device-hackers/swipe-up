@@ -51,71 +51,10 @@ class FullScreenButton extends ControlButton {
                 self.style.backgroundImage = 'url("assets/fullscreen-exit.png")'
             }
         } )
-    }
-}
 
-class LockScreenButton extends ControlButton {
-    constructor(debugWidget) {
-        super('lock')
-        let win = debugWidget._win
-
-        super.click( event => {
-            let orientationToLockTo = debugWidget._browserUiState.orientation === 'LANDSCAPE' ? 'portrait' : 'landscape'
-
-            if (LockScreenButton.isModernLockScreenSupported(win)) {
-                LockScreenButton.lockModern(win, event.target, orientationToLockTo)
-            } else {
-                LockScreenButton.lockLegacy(win, event.target, orientationToLockTo)
-            }
-        } )
-    }
-
-    static isModernLockScreenSupported(win) {
-        return win.screen.orientation && win.screen.orientation.lock
-    }
-
-    static isLegacyLockScreenSupported(win) {
-        return win.screen.lockOrientation || win.screen.mozLockOrientation || win.screen.msLockOrientation
-    }
-
-    static lockModern(win, self, orientationToLockTo) {
-        if ($(self).html() === 'lock') {
-            win.screen.orientation.lock(orientationToLockTo)
-                .then(() => LockScreenButton.setLocked(self))
-                .catch((err) => console.error('Orientation lock failed: ', err))
-        } else {
-            win.screen.orientation.unlock()
-            LockScreenButton.setUnlocked(self)
+        if (!fscreen.fullscreenEnabled) {
+            $('.fullscreen').classList.add('disabled') //TODO may not work without timeout!
         }
-    }
-
-    static lockLegacy(win, self, orientationToLockTo) {
-        let lockOrientation = win.screen.lockOrientation || win.screen.mozLockOrientation || win.screen.msLockOrientation
-        let unlockOrientation = win.screen.unlockOrientation || win.screen.mozUnlockOrientation || win.screen.msUnlockOrientation
-
-        if ($(self).html() === 'lock' && lockOrientation(orientationToLockTo)) {
-            LockScreenButton.setLocked(self)
-        } else {
-            console.error('Orientation lock failed')
-        }
-
-        if ($(self).html() === 'unlock' && unlockOrientation()) {
-            LockScreenButton.setUnlocked(self)
-        } else {
-            console.error('Orientation unlock failed')
-        }
-    }
-
-    static setLocked(self) {
-        console.log('Orientation was locked')
-        $(self).html('unlock')
-        self.style.backgroundImage = 'url("assets/unlock.png")'
-    }
-
-    static setUnlocked(self) {
-        console.log('Orientation was unlocked')
-        $(self).html('lock')
-        self.style.backgroundImage = 'url("assets/lock.png")'
     }
 }
 
@@ -182,14 +121,14 @@ class DisableButton extends ControlButton {
                 win.localStorage.setItem('SwipeUp._disabled', 'true')
                 swipeUp.disable()
                 debugWidget._debugWidgetContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-                $(self).html('enable')
                 self.style.backgroundImage = 'url("assets/add.png")'
+                $(self).html('enable')
             } else {
                 win.localStorage.setItem('SwipeUp._disabled', 'false')
                 swipeUp.enable()
                 debugWidget._debugWidgetContainer.style.backgroundColor = 'initial'
-                $(self).html(selfName)
                 self.style.backgroundImage = 'url("assets/remove.png")'
+                $(self).html(selfName)
             }
         } )
     }
@@ -231,19 +170,9 @@ export default class DebugWidget {
 
         closeMeButton.attachClickAfterButtonAddedToDom()
 
-        if (!this._browserUiState.fscreen.fullscreenEnabled) {
-            $('.fullscreen').classList.add('disabled')
-        }
-
-        if (!LockScreenButton.isModernLockScreenSupported(this._win) &&
-            !LockScreenButton.isLegacyLockScreenSupported(this._win)) {
-            $('.lock').classList.add('disabled')
-        }
-
         new KeyboardButton(this)
         new RefreshButton(this)
         new FullScreenButton(this)
-        new LockScreenButton(this)
         new EmailButton(this)
         new DisableButton(this, swipeUp)
     }
