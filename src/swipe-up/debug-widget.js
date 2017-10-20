@@ -1,49 +1,46 @@
 import {version, dependencies} from '../../package.json'
 import $ from '../util/dom'
 
-class KeyboardButton {
+
+class ControlButton {
+    constructor(selfName, content) {
+        this._selfName = selfName
+        $('.debugButtons').append(content ? content : `<button class='${selfName}'>${selfName}</button>`)
+    }
+
+    /**
+     * Due to the fact we rely on innerHTML, so then adding click handler immediately after new element added via it -
+     * may result into element not yet available for $/querySelector, thus click handler not assigned. Fixed via timeout.
+     * @param handler Click handler to be assigned
+     */
+    click(handler) {
+        setTimeout(() => $(`.${this._selfName}`).click(handler), 0)
+    }
+}
+
+class KeyboardButton extends ControlButton {
     constructor(debugWidget) {
-        let parentContainer = debugWidget._debugButtons
-
-        let input = document.createElement('input')
-        input.className = 'inputForKeyboard'
-        input.setAttribute('tabindex', 0)
-        parentContainer.appendChild(input)
-
         let selfName = 'keyboard'
+        super(selfName, `<input class='inputForKeyboard' tabindex='0'>` +
+                        `<button class='${selfName}'>${selfName}</button>`)
 
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        $('.keyboard').click(() => $('.inputForKeyboard').focus())
+        super.click( () => $('.inputForKeyboard').focus() )
     }
 }
 
-class RefreshButton {
+class RefreshButton extends ControlButton {
     constructor(debugWidget) {
-        let parentContainer = debugWidget._debugButtons
-        let selfName = 'refresh'
-
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        $('.refresh').click(() => debugWidget.update())
+        super('refresh')
+        super.click( () => debugWidget.update() )
     }
 }
 
-class FullScreenButton {
+class FullScreenButton extends ControlButton {
     constructor(debugWidget) {
+        super('fullscreen')
         let fscreen = debugWidget._browserUiState.fscreen
-        let parentContainer = debugWidget._debugButtons
-        let selfName = 'fullscreen'
 
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        $('.fullscreen').click(event => {
+        super.click( event => {
             let self = event.target
 
             if (fscreen.fullscreenElement) {
@@ -53,31 +50,24 @@ class FullScreenButton {
                 fscreen.requestFullscreen(debugWidget._win.document.documentElement)
                 self.style.backgroundImage = 'url("assets/fullscreen-exit.png")'
             }
-        })
+        } )
     }
 }
 
-class LockScreenButton {
+class LockScreenButton extends ControlButton {
     constructor(debugWidget) {
+        super('lock')
         let win = debugWidget._win
-        let parentContainer = debugWidget._debugButtons
-        let selfName = 'lock'
 
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        $('.lock').click(event => {
-            let orientationToLockTo =
-                debugWidget._browserUiState.orientation === 'LANDSCAPE' ? 'portrait' : 'landscape'
-            let self = event.target
+        super.click( event => {
+            let orientationToLockTo = debugWidget._browserUiState.orientation === 'LANDSCAPE' ? 'portrait' : 'landscape'
 
             if (LockScreenButton.isModernLockScreenSupported(win)) {
-                LockScreenButton.lockModern(win, self, orientationToLockTo)
+                LockScreenButton.lockModern(win, event.target, orientationToLockTo)
             } else {
-                LockScreenButton.lockLegacy(win, self, orientationToLockTo)
+                LockScreenButton.lockLegacy(win, event.target, orientationToLockTo)
             }
-        })
+        } )
     }
 
     static isModernLockScreenSupported(win) {
@@ -89,7 +79,7 @@ class LockScreenButton {
     }
 
     static lockModern(win, self, orientationToLockTo) {
-        if (self.innerHTML === 'lock') {
+        if ($(self).html() === 'lock') {
             win.screen.orientation.lock(orientationToLockTo)
                 .then(() => LockScreenButton.setLocked(self))
                 .catch((err) => console.error('Orientation lock failed: ', err))
@@ -103,13 +93,13 @@ class LockScreenButton {
         let lockOrientation = win.screen.lockOrientation || win.screen.mozLockOrientation || win.screen.msLockOrientation
         let unlockOrientation = win.screen.unlockOrientation || win.screen.mozUnlockOrientation || win.screen.msUnlockOrientation
 
-        if (self.innerHTML === 'lock' && lockOrientation(orientationToLockTo)) {
+        if ($(self).html() === 'lock' && lockOrientation(orientationToLockTo)) {
             LockScreenButton.setLocked(self)
         } else {
             console.error('Orientation lock failed')
         }
 
-        if (self.innerHTML === 'unlock' && unlockOrientation()) {
+        if ($(self).html() === 'unlock' && unlockOrientation()) {
             LockScreenButton.setUnlocked(self)
         } else {
             console.error('Orientation unlock failed')
@@ -118,28 +108,23 @@ class LockScreenButton {
 
     static setLocked(self) {
         console.log('Orientation was locked')
-        self.innerHTML = 'unlock'
+        $(self).html('unlock')
         self.style.backgroundImage = 'url("assets/unlock.png")'
     }
 
     static setUnlocked(self) {
         console.log('Orientation was unlocked')
-        self.innerHTML = 'lock'
+        $(self).html('lock')
         self.style.backgroundImage = 'url("assets/lock.png")'
     }
 }
 
-class EmailButton {
+class EmailButton extends ControlButton {
     constructor(debugWidget) {
+        super('email')
         let win = debugWidget._win
-        let parentContainer = debugWidget._debugButtons
-        let selfName = 'email'
 
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        $('.email').click(() => {
+        super.click( () => {
             let deviceInfoToInclude = prompt('Please enter your device and browser name', '')
             let navigatorInfo = ''
 
@@ -157,13 +142,14 @@ class EmailButton {
                 `screen.width x height : ${win.screen.width} x ${win.screen.height}\n` +
                 `window.innerWidth x innerHeight : ${win.innerWidth} x ${win.innerHeight}\n` +
                 `window.navigator.standalone : ${win.navigator.standalone}\n` +
-                `window.orientation : ${win.orientation}\n\n` +
+                `window.orientation : ${win.orientation}\n` +
+                `screen.orientation.type : ${win.screen.orientation ? win.screen.orientation.type : 'N/A'}\n\n` +
                 `navigator.javaEnabled() : ${win.navigator.javaEnabled()}\n` +
                 `${navigatorInfo}`
 
             win.location.href = `mailto:detect.js.org@gmail.com?` +
                 `${EmailButton.encodeEmailCorrectly(generatedLink, win.navigator.userAgent)}`
-        })
+        } )
     }
 
     static encodeEmailCorrectly(generatedLink, userAgent) {
@@ -175,41 +161,37 @@ class EmailButton {
     }
 }
 
-class DisableButton {
+class DisableButton extends ControlButton {
     constructor(debugWidget, swipeUp) {
+        super('disable')
         let win = debugWidget._win
-        let parentContainer = debugWidget._debugButtons
         let selfName = 'disable'
 
-        let self = document.createElement('button')
-        self.className = self.innerHTML = selfName
-        parentContainer.appendChild(self)
-
-        self = $(`.${selfName}`)
         let swipeUpDisabled = (win.localStorage.getItem('SwipeUp._disabled') === 'true')
+        let self = $(`.${selfName}`)
 
         if (swipeUpDisabled) {
             self.html('enable')
             self.style.backgroundImage = 'url("assets/add.png")'
         }
 
-        self.click(event => {
+        super.click( event => {
             let self = event.target
 
-            if (self.innerHTML.indexOf(selfName) !== -1) {
+            if ($(self).html().indexOf(selfName) !== -1) {
                 win.localStorage.setItem('SwipeUp._disabled', 'true')
                 swipeUp.disable()
                 debugWidget._debugWidgetContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-                self.innerHTML = 'enable'
+                $(self).html('enable')
                 self.style.backgroundImage = 'url("assets/add.png")'
             } else {
                 win.localStorage.setItem('SwipeUp._disabled', 'false')
                 swipeUp.enable()
                 debugWidget._debugWidgetContainer.style.backgroundColor = 'initial'
-                self.innerHTML = selfName
+                $(self).html(selfName)
                 self.style.backgroundImage = 'url("assets/remove.png")'
             }
-        })
+        } )
     }
 }
 
@@ -220,7 +202,7 @@ class CloseMeButton {
 
         let self = document.createElement('button')
         self.className = this._selfName
-        self.innerHTML = 'x'
+        $(self).html('x')
         this._debugWidget._debugWidgetContainer.appendChild(self)
     }
 
@@ -239,21 +221,13 @@ export default class DebugWidget {
 
         let closeMeButton = new CloseMeButton(this)
 
-        this._debugAllReadings = document.createElement('div')
-        this._debugAllReadings.className = 'debugAllReadings'
-        this._debugWidgetContainer.appendChild(this._debugAllReadings)
-
-        this._debugUserAgent = document.createElement('div')
-        this._debugUserAgent.className = 'debugUserAgent'
-        this._debugWidgetContainer.appendChild(this._debugUserAgent)
-
-        this._debugButtons = document.createElement('div')
-        this._debugButtons.className = 'debugButtons'
-        this._debugWidgetContainer.appendChild(this._debugButtons)
+        $(this._debugWidgetContainer).append(
+            '<div class="debugAllReadings"></div>'+
+            '<div class="debugUserAgent"></div>' +
+            '<div class="debugButtons"></div>')
+        this._win.document.body.appendChild(this._debugWidgetContainer)
 
         this.update()
-
-        this._win.document.body.appendChild(this._debugWidgetContainer)
 
         closeMeButton.attachClickAfterButtonAddedToDom()
 
@@ -312,7 +286,7 @@ export default class DebugWidget {
         const deviceName = this._browserUiState._provider._device ?
             this._browserUiState._provider._device.toLowerCase() : '...'
 
-        this._debugAllReadings.innerHTML =
+        $('.debugAllReadings').html(
             `v${ownVersion} :` +
             `v${browserUiStateVersion} : ` +
             `${devicePixelRatio} : ` +
@@ -328,28 +302,26 @@ export default class DebugWidget {
             `<b>${deviation}</b> : ` +
             `${keyboardThreshold} : ` +
             `<span class='state'>${state}</span>`
+        )
 
-        this._debugUserAgent.innerHTML =
+        $('.debugUserAgent').html(
             `${userAgentName} : ` +
             `${deviceName} : ` +
             `${userAgent}`
+        )
     }
 
     show() {
-        this._debugWidgetContainer.style.display = 'block'
+        $(this._debugWidgetContainer).show()
         this._debugWidgetContainer.style.backgroundColor =
             this._browserUiState.state === 'COLLAPSED' ? 'initial' : 'rgba(0, 0, 0, 0.5)'
     }
 
     hide() {
-        this._debugWidgetContainer.style.display = 'none'
+        $(this._debugWidgetContainer).hide()
     }
 
     toggle() {
-        if (this._debugWidgetContainer.style.display === 'block') {
-            this.hide()
-        } else {
-            this.show()
-        }
+        $(this._debugWidgetContainer).toggle()
     }
 }

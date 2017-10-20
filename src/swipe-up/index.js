@@ -1,5 +1,6 @@
 import BrowserUiState from 'browser-ui-state'
 import DebugWidget from './debug-widget'
+import $ from '../util/dom'
 
 class SwipeUp {
     constructor(initialOrientation = null, win = window) {
@@ -9,7 +10,7 @@ class SwipeUp {
         this._win.addEventListener('load', () => {
             this._swipeUpOverlay = document.createElement('div')
             this._swipeUpOverlay.className = 'swipeUpOverlay'
-            this._swipeUpOverlay.innerHTML = 'Swipe up to continue in full-screen mode'
+            $(this._swipeUpOverlay).html('Swipe up to continue in full-screen mode')
             this._win.document.body.appendChild(this._swipeUpOverlay)
 
             this._showOrHide()
