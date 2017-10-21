@@ -1,4 +1,4 @@
-import $ from '../../util/dom'
+import $ from '../../../util/dom'
 import ControlButton from './control-button'
 
 export default class KeyboardButton extends ControlButton {

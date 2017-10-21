@@ -1,4 +1,4 @@
-import {version, dependencies} from '../../../package.json'
+import {version, dependencies} from '../../../../package.json'
 import ControlButton from './control-button'
 
 export default class EmailButton extends ControlButton {

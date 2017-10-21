@@ -1,4 +1,4 @@
-import $ from '../../util/dom'
+import $ from '../../../util/dom'
 import ControlButton from './control-button'
 
 export default class DisableButton extends ControlButton {
@@ -27,7 +27,7 @@ export default class DisableButton extends ControlButton {
             } else {
                 win.localStorage.setItem('SwipeUp._disabled', 'false')
                 swipeUp.enable()
-                debugWidget._debugWidgetContainer.style.backgroundColor = 'initial'
+                debugWidget._debugWidgetContainer.style.backgroundColor = swipeUp.isShown ? 'initial' : 'rgba(0, 0, 0, 0.5)'
                 self.style.backgroundImage = 'url("assets/remove.png")'
                 $(self).html(selfName)
             }

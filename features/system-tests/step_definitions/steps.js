@@ -24,6 +24,11 @@ defineSupportCode(function(context) {
         document: {
             documentElement: {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }
+            },
+            createElement(element){
+                let obj = {}
+                obj.addEventListener = function () { /*NOOP*/ }
+                return obj
             }
         },
         localStorage: {

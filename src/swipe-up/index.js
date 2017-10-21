@@ -1,132 +1,81 @@
 import BrowserUiState from 'browser-ui-state'
-import DebugWidget from './debug-widget'
+import DebugWidget from './debug/debug-widget'
 import $ from '../util/dom'
 
-class SwipeUp {
-    constructor(initialOrientation = null, win = window) {
-        this._win = win
-        this.browserUiState = new BrowserUiState(initialOrientation, this._win)
+//Private scope
+let win = new WeakMap()
+let swipeUpOverlay = new WeakMap()
+let debugWidget = new WeakMap()
 
-        let quickTapDetected = 0
-        let timerId = null
-        let bottomRightTouched
-        let topLeftTouched3Times
+export default class SwipeUp {
+    constructor(initialOrientation = null, windowObj = window) {
+        win.set(this, windowObj)
+        swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
 
-        let isTopLeftCornerTouched = (touch) => touch.clientX <= 100 && touch.clientY <= 100
+        //expose browser-ui-state as part of swipe-up API
+        this.browserUiState = new BrowserUiState(initialOrientation, win.get(this))
 
-        let isBottomRightCornerTouched = (touch) =>
-            touch.clientX >= win.innerWidth - 100 && touch.clientY >= win.innerHeight - 100
-
-        this._win.addEventListener('load', () => {
-            this._swipeUpOverlay = document.createElement('div')
-            this._swipeUpOverlay.className = 'swipeUpOverlay'
-            $(this._swipeUpOverlay).html('Swipe up to continue in full-screen mode')
-            this._win.document.body.appendChild(this._swipeUpOverlay)
+        win.get(this).addEventListener('load', () => {
+            swipeUpOverlay.get(this).className = 'swipeUpOverlay'
+            $(swipeUpOverlay.get(this)).html('Swipe up to continue in full-screen mode')
+            win.get(this).document.body.appendChild(swipeUpOverlay.get(this))
 
             this._showOrHide()
-
-            this._swipeUpOverlay.addEventListener('touchstart', process_touchstart.bind(this), false);
-
-            function process_touchstart(event) {
-                bottomRightTouched = topLeftTouched3Times = false
-
-                switch (event.touches.length) {
-                    case 1: handle_one_touch(event); break;
-                    case 2: handle_two_touches(event, this); break;
-                    default: console.warn('not 2 touches', event); break;
-                }
-            }
-
-            function handle_one_touch(event) {
-                //console.log('handle_one_touch: ', event)
-
-                process_touch(event.touches[0]);
-            }
-
-            function handle_two_touches(event, swipeup) {
-                console.log('handle_two_touches: ', event)
-
-                for (let i=0; i < event.touches.length; i++) {
-                    process_touch(event.touches[i]);
-                }
-
-                if (topLeftTouched3Times && bottomRightTouched) {
-                    swipeup.showDebugWidget()
-                }
-            }
-
-            function process_touch(touch) {
-                if (isTopLeftCornerTouched(touch)) {
-                    quickTapDetected++
-                    console.log(`top left corner touched (${quickTapDetected}): `, touch)
-
-                    if (timerId) clearTimeout(timerId)
-                    timerId = setTimeout(() => quickTapDetected = 0, 250)
-
-                    if (quickTapDetected >= 3) {
-                        console.warn('3+ quick taps detected!', quickTapDetected)
-                        topLeftTouched3Times = true
-                    }
-                } else if (isBottomRightCornerTouched(touch)) {
-                    console.log('bottom right corner touched: ', touch)
-                    bottomRightTouched = true
-                } else {
-                    console.log('other touched: ', touch)
-                }
-            }
         })
 
         const resizeHandler = () => {
             this._showOrHide()
-            this._debugWidgetContainer.update()
+            debugWidget.get(this).update()
         }
 
         //TODO add request animation frame, see https://developer.mozilla.org/en-US/docs/Web/Events/resize
-        this._win.addEventListener('resize', resizeHandler)
-        this._win.addEventListener('orientationchange', resizeHandler)
         //TODO add scroll handler
+        win.get(this).addEventListener('resize', resizeHandler)
+        win.get(this).addEventListener('orientationchange', resizeHandler)
     }
 
     _showOrHide() {
-        let disabled = (this._win.localStorage.getItem('SwipeUp._disabled') === 'true')
+        let disabled = (win.get(this).localStorage.getItem('SwipeUp._disabled') === 'true')
 
         if (!disabled && this.browserUiState.state === 'COLLAPSED') {
-            this._swipeUpOverlay.style.display = 'block'
-        } else if (this._swipeUpOverlay.style.display !== 'none') {
-            this._swipeUpOverlay.style.display = 'none'
+            swipeUpOverlay.get(this).style.display = 'block'
+        } else if (swipeUpOverlay.get(this).style.display !== 'none') {
+            swipeUpOverlay.get(this).style.display = 'none'
         }
     }
 
+    get isShown() {
+        return swipeUpOverlay.get(this).style.display === 'block'
+    }
+
     disable() {
-        this._win.localStorage.setItem('SwipeUp._disabled', 'true')
+        win.get(this).localStorage.setItem('SwipeUp._disabled', 'true')
         this._showOrHide()
     }
 
     enable() {
-        this._win.localStorage.setItem('SwipeUp._disabled', 'false')
+        win.get(this).localStorage.setItem('SwipeUp._disabled', 'false')
         this._showOrHide()
     }
 
     showDebugWidget() {
-        if (!this._debugWidgetContainer) {
-            this._debugWidgetContainer = new DebugWidget(this)
+        if (!debugWidget.get(this)) {
+            debugWidget.set(this, new DebugWidget(this, swipeUpOverlay.get(this)))
         }
-        this._debugWidgetContainer.show()
+        debugWidget.get(this).show()
     }
 
     hideDebugWidget() {
-        if (!this._debugWidgetContainer) {
-            this._debugWidgetContainer = new DebugWidget(this)
+        if (!debugWidget.get(this)) {
+            debugWidget.set(this, new DebugWidget(this, swipeUpOverlay.get(this)))
         }
-        this._debugWidgetContainer.hide()
+        debugWidget.get(this).hide()
     }
 
     toggleDebugWidget() {
-        if (!this._debugWidgetContainer) {
-            this._debugWidgetContainer = new DebugWidget(this)
+        if (!debugWidget.get(this)) {
+            debugWidget.set(this, new DebugWidget(this, swipeUpOverlay.get(this)))
         }
-        this._debugWidgetContainer.toggle()
+        debugWidget.get(this).toggle()
     }
 }
-
-export default SwipeUp

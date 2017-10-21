@@ -1,5 +1,5 @@
-import {version, dependencies} from '../../package.json'
-import $ from '../util/dom'
+import {version, dependencies} from '../../../package.json'
+import $ from '../../util/dom'
 import KeyboardButton from './buttons/keyboard-button'
 import RefreshButton from './buttons/refresh-button'
 import FullScreenButton from './buttons/fullscreen-button'
@@ -8,7 +8,8 @@ import DisableButton from './buttons/disable-button'
 import CloseMeButton from './buttons/close-me-button'
 
 export default class DebugWidget {
-    constructor(swipeUp, win = window) {
+    constructor(swipeUp, swipeUpOverlay, win = window) {
+        this._swipeUp = swipeUp
         this._win = win
         this._browserUiState = swipeUp.browserUiState
 
@@ -32,13 +33,77 @@ export default class DebugWidget {
         new FullScreenButton(this)
         new EmailButton(this)
         new DisableButton(this, swipeUp)
+
+        let quickTapDetected = 0
+        let timerId = null
+        let bottomRightTouched
+        let topLeftTouched3Times
+
+        const threshold = 100
+        let isLeftTouched = (touch) => touch.clientX <= threshold
+        let isRightTouched = (touch) => touch.clientY >= win.innerHeight - threshold
+        let isTopTouched = (touch) => touch.clientY <= threshold
+        let isBottomTouched = (touch) => touch.clientX >= win.innerWidth - threshold
+        let isTopLeftCornerTouched = (touch) => isTopTouched(touch) && isLeftTouched(touch)
+        let isBottomRightCornerTouched = (touch) => isBottomTouched(touch) && isRightTouched(touch)
+        let isTopRightCornerTouched = (touch) => isTopTouched(touch) && isRightTouched(touch)
+        let isBottomLeftCornerTouched = (touch) => isBottomTouched(touch) && isLeftTouched(touch)
+
+        swipeUpOverlay.addEventListener('touchstart', process_touchstart.bind(this), false);
+
+        function process_touchstart(event) {
+            bottomRightTouched = topLeftTouched3Times = false
+
+            switch (event.touches.length) {
+                case 1: handle_one_touch(event); break;
+                case 2: handle_two_touches(event, this); break;
+                default: console.warn('not 2 touches', event); break;
+            }
+        }
+
+        function handle_one_touch(event) {
+            console.log('handle_one_touch: ', event)
+
+            process_touch(event.touches[0]);
+        }
+
+        function handle_two_touches(event, swipeup) {
+            console.log('handle_two_touches: ', event)
+
+            for (let i=0; i < event.touches.length; i++) {
+                process_touch(event.touches[i]);
+            }
+
+            if (topLeftTouched3Times && bottomRightTouched) {
+                swipeup.showDebugWidget()
+            }
+        }
+
+        function process_touch(touch) {
+            if (isTopLeftCornerTouched(touch)) {
+                quickTapDetected++
+                console.log(`top left corner touched (${quickTapDetected}): `, touch)
+
+                if (timerId) clearTimeout(timerId)
+                timerId = setTimeout(() => quickTapDetected = 0, 250)
+
+                if (quickTapDetected >= 3) {
+                    console.warn('3+ quick taps detected!', quickTapDetected)
+                    topLeftTouched3Times = true
+                }
+            } else if (isBottomRightCornerTouched(touch)) {
+                console.log('bottom right corner touched: ', touch)
+                bottomRightTouched = true
+            } else {
+                console.log('other touched: ', touch)
+            }
+        }
     }
 
     update() {
         if (this._debugWidgetContainer.style.display === 'none') return
 
-        this._debugWidgetContainer.style.backgroundColor =
-            this._browserUiState.state === 'COLLAPSED' ? 'initial' : 'rgba(0, 0, 0, 0.5)'
+        this._debugWidgetContainer.style.backgroundColor = this._swipeUp.isShown ? 'initial' : 'rgba(0, 0, 0, 0.5)'
 
         $('.debugAllReadings').html(this.recordAllReadings)
         $('.debugUserAgent').html(this.recordUserAgent)
@@ -101,11 +166,13 @@ export default class DebugWidget {
 
     show() {
         $(this._debugWidgetContainer).show()
-        this._debugWidgetContainer.style.backgroundColor =
-            this._browserUiState.state === 'COLLAPSED' ? 'initial' : 'rgba(0, 0, 0, 0.5)'
+        this._debugWidgetContainer.style.backgroundColor = this._swipeUp.isShown ? 'initial' : 'rgba(0, 0, 0, 0.5)'
     }
 
     hide() { $(this._debugWidgetContainer).hide() }
 
-    toggle() { $(this._debugWidgetContainer).toggle() }
+    toggle() {
+        $(this._debugWidgetContainer).toggle()
+        this._debugWidgetContainer.style.backgroundColor = this._swipeUp.isShown ? 'initial' : 'rgba(0, 0, 0, 0.5)'
+    }
 }

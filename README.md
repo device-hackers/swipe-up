@@ -1,2 +1,2 @@
 # swipe-up
-Browser UI State based reference implementation of the "Swipe Up" functionality required to switch browser to full screen
+[![npm version](https://badge.fury.io/js/swipe-up.svg)](https://badge.fury.io/js/swipe-up) ![single dependency](https://david-dm.org/TheBit/swipe-up.svg) ![build](https://travis-ci.org/device-hackers/swipe-up.svg?branch=master)
