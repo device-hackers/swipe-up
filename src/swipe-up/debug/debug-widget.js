@@ -49,7 +49,7 @@ export default class DebugWidget {
         let isTopRightCornerTouched = (touch) => isTopTouched(touch) && isRightTouched(touch)
         let isBottomLeftCornerTouched = (touch) => isBottomTouched(touch) && isLeftTouched(touch)
 
-        swipeUpOverlay.addEventListener('touchstart', process_touchstart.bind(this), false);
+        swipeUpOverlay.addEventListener('touchstart', process_touchstart.bind(this), false)
 
         function process_touchstart(event) {
             bottomRightTouched = topLeftTouched3Times = false
@@ -64,14 +64,14 @@ export default class DebugWidget {
         function handle_one_touch(event) {
             console.log('handle_one_touch: ', event)
 
-            process_touch(event.touches[0]);
+            process_touch(event.touches[0])
         }
 
         function handle_two_touches(event, swipeup) {
             console.log('handle_two_touches: ', event)
 
             for (let i=0; i < event.touches.length; i++) {
-                process_touch(event.touches[i]);
+                process_touch(event.touches[i])
             }
 
             if (topLeftTouched3Times && bottomRightTouched) {
