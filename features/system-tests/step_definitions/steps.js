@@ -21,6 +21,9 @@ defineSupportCode(function(context) {
             userAgent: '',
             standalone: false
         },
+        location: {
+            search: ''
+        },
         document: {
             documentElement: {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }

@@ -9,7 +9,7 @@ class SwipeUpDemo {
 
         window.addEventListener('load', () => {
             this.updateUi()
-            this.swipeUp.showDebugWidget()
+            //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
 
             document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())

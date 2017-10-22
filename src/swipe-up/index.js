@@ -1,47 +1,54 @@
 import BrowserUiState from 'browser-ui-state'
 import DebugWidget from './debug/debug-widget'
-import $ from '../util/dom'
+import DebugWidgetTrigger from './debug/debug-widget-trigger'
+import EventThrottle from '../utils/event-throttle'
 
 //Private scope
+const swipeUpText = 'Swipe up to continue in full-screen mode'
+const html5FullScreenText = 'Touch to continue in full-screen mode'
+const localStorageDisableKey = 'SwipeUp._disabled'
+
 let win = new WeakMap()
 let swipeUpOverlay = new WeakMap()
 let debugWidget = new WeakMap()
+
+let showOrHide = (self) => {
+    let disabled = (win.get(self).localStorage.getItem(localStorageDisableKey) === 'true')
+
+    if (!disabled && self.browserUiState.state === 'COLLAPSED') {
+        swipeUpOverlay.get(self).style.display = 'block'
+    } else if (swipeUpOverlay.get(self).style.display !== 'none') {
+        swipeUpOverlay.get(self).style.display = 'none'
+    }
+}
 
 export default class SwipeUp {
     constructor(initialOrientation = null, windowObj = window) {
         win.set(this, windowObj)
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
+        swipeUpOverlay.get(this).className = 'swipeUpOverlay'
+        swipeUpOverlay.get(this).innerHTML = swipeUpText
+
+        let debugWidgetTrigger = new DebugWidgetTrigger(this, swipeUpOverlay.get(this), win.get(this))
 
         //expose browser-ui-state as part of swipe-up API
         this.browserUiState = new BrowserUiState(initialOrientation, win.get(this))
 
         win.get(this).addEventListener('load', () => {
-            swipeUpOverlay.get(this).className = 'swipeUpOverlay'
-            $(swipeUpOverlay.get(this)).html('Swipe up to continue in full-screen mode')
             win.get(this).document.body.appendChild(swipeUpOverlay.get(this))
-
-            this._showOrHide()
+            showOrHide(this)
+            debugWidgetTrigger.shouldShowWidgetOnLoad ? this.showDebugWidget() : null
         })
 
         const resizeHandler = () => {
-            this._showOrHide()
-            debugWidget.get(this).update()
+            showOrHide(this)
+            debugWidget.get(this) ? debugWidget.get(this).update() : null
         }
 
-        //TODO add request animation frame, see https://developer.mozilla.org/en-US/docs/Web/Events/resize
-        //TODO add scroll handler
-        win.get(this).addEventListener('resize', resizeHandler)
+        //TODO add scroll handler to workaround case with iPhone 6-8 Plus Safari when there are 2+ tabs in landscape
+        new EventThrottle('resize', 'optimizedResize', win.get(this))
+        win.get(this).addEventListener('optimizedResize', resizeHandler)
         win.get(this).addEventListener('orientationchange', resizeHandler)
-    }
-
-    _showOrHide() {
-        let disabled = (win.get(this).localStorage.getItem('SwipeUp._disabled') === 'true')
-
-        if (!disabled && this.browserUiState.state === 'COLLAPSED') {
-            swipeUpOverlay.get(this).style.display = 'block'
-        } else if (swipeUpOverlay.get(this).style.display !== 'none') {
-            swipeUpOverlay.get(this).style.display = 'none'
-        }
     }
 
     get isShown() {
@@ -49,13 +56,13 @@ export default class SwipeUp {
     }
 
     disable() {
-        win.get(this).localStorage.setItem('SwipeUp._disabled', 'true')
-        this._showOrHide()
+        win.get(this).localStorage.setItem(localStorageDisableKey, 'true')
+        showOrHide(this)
     }
 
     enable() {
-        win.get(this).localStorage.setItem('SwipeUp._disabled', 'false')
-        this._showOrHide()
+        win.get(this).localStorage.setItem(localStorageDisableKey, 'false')
+        showOrHide(this)
     }
 
     showDebugWidget() {

@@ -1,4 +1,4 @@
-import $ from '../../../util/dom'
+import $ from '../../../utils/dom'
 
 export default class ControlButton {
     constructor(selfName, content) {
