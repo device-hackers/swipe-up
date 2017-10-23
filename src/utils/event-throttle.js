@@ -14,7 +14,7 @@ export default class EventThrottle {
             if (win.requestAnimationFrame) {
                 win.requestAnimationFrame(dispatchFunction)
             } else {
-                setTimeout(dispatchFunction, 66);
+                setTimeout(dispatchFunction, 66)
             }
         }
 

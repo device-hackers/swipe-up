@@ -1,15 +1,38 @@
 import {version, dependencies} from '../../package.json'
-import SwipeUp from "../swipe-up/index";
+import SwipeUp from '../swipe-up/index'
+
+class EventThrottle {
+    constructor(type, name, win, obj) {
+        obj = obj || win
+        let running = false
+
+        let dispatchFunction = () => {
+            obj.dispatchEvent(new CustomEvent(name))
+            running = false
+        }
+
+        let wrapperFunction = () => {
+            if (running) return
+            running = true
+            if (win.requestAnimationFrame) {
+                win.requestAnimationFrame(dispatchFunction)
+            } else {
+                setTimeout(dispatchFunction, 66)
+            }
+        }
+
+        obj.addEventListener(type, wrapperFunction)
+    }
+}
 
 class SwipeUpDemo {
     constructor() {
         let initialOrientation = window.innerWidth > window.innerHeight ? 'LANDSCAPE' : 'PORTRAIT'
 
-        this.swipeUp = new SwipeUp(initialOrientation, window)
-
         window.addEventListener('load', () => {
-            this.updateUi()
+            this.swipeUp = new SwipeUp(initialOrientation, window)
             //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
+            this.updateUi()
 
             document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
@@ -17,19 +40,11 @@ class SwipeUpDemo {
 
         const resizeHandler = () => {
             this.updateUi()
-            this.safeRun(this.updateUi.bind(this))
         }
 
-        window.addEventListener('resize', resizeHandler)
+        new EventThrottle('resize', 'optimizedResize', window)
+        window.addEventListener('optimizedResize', resizeHandler)
         window.addEventListener('orientationchange', resizeHandler)
-    }
-
-    safeRun(func) {
-        setTimeout(func, 300)
-    }
-
-    write(elementId, text) {
-        document.getElementById(elementId).innerHTML = text
     }
 
     updateUi() {
@@ -46,6 +61,10 @@ class SwipeUpDemo {
         write('userAgent', userAgent)
         write('userAgentName', userAgentName)
         write('deviceName', deviceName)
+    }
+
+    write(elementId, text) {
+        document.getElementById(elementId).innerHTML = text
     }
 
     toggleViewport() {

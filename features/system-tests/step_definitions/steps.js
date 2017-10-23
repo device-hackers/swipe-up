@@ -25,12 +25,18 @@ defineSupportCode(function(context) {
             search: ''
         },
         document: {
+            body: {
+                appendChild(element) { /*NOOP*/ }
+            },
             documentElement: {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }
             },
             createElement(element){
                 let obj = {}
                 obj.addEventListener = function () { /*NOOP*/ }
+                obj.style = {
+                    display : ''
+                }
                 return obj
             }
         },

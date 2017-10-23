@@ -24,6 +24,9 @@ let showOrHide = (self) => {
 
 export default class SwipeUp {
     constructor(initialOrientation = null, windowObj = window) {
+        if (!windowObj.document.body) {
+            throw new Error('Swipe Up should be instantiated on window load when DOM is ready')
+        }
         win.set(this, windowObj)
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
         swipeUpOverlay.get(this).className = 'swipeUpOverlay'
@@ -31,24 +34,24 @@ export default class SwipeUp {
 
         let debugWidgetTrigger = new DebugWidgetTrigger(this, swipeUpOverlay.get(this), win.get(this))
 
-        //expose browser-ui-state as part of swipe-up API
+        //expose browser-ui-state and fscreen as part of swipe-up API
         this.browserUiState = new BrowserUiState(initialOrientation, win.get(this))
+        this.fscreen = this.browserUiState.fscreen
 
-        win.get(this).addEventListener('load', () => {
-            win.get(this).document.body.appendChild(swipeUpOverlay.get(this))
-            showOrHide(this)
-            debugWidgetTrigger.shouldShowWidgetOnLoad ? this.showDebugWidget() : null
-        })
+        win.get(this).document.body.appendChild(swipeUpOverlay.get(this))
+        showOrHide(this)
+        debugWidgetTrigger.shouldShowWidgetOnLoad ? this.showDebugWidget() : null
 
         const resizeHandler = () => {
             showOrHide(this)
             debugWidget.get(this) ? debugWidget.get(this).update() : null
         }
 
-        //TODO add scroll handler to workaround case with iPhone 6-8 Plus Safari when there are 2+ tabs in landscape
         new EventThrottle('resize', 'optimizedResize', win.get(this))
+        new EventThrottle('scroll', 'optimizedScroll', win.get(this))
         win.get(this).addEventListener('optimizedResize', resizeHandler)
         win.get(this).addEventListener('orientationchange', resizeHandler)
+        win.get(this).addEventListener('optimizedScroll', resizeHandler)
     }
 
     get isShown() {

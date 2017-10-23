@@ -70,7 +70,7 @@ export default class DebugWidget {
         const keyboardThreshold = `${this._browserUiState.keyboardThreshold}%`
         const state = this._browserUiState.state.toLowerCase()
 
-        return `v${ownVersion} :` +
+        return `v${ownVersion} : ` +
             `v${browserUiStateVersion} : ` +
             `${devicePixelRatio} : ` +
             `${screenDimensions} : ` +
