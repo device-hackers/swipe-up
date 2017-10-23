@@ -29,7 +29,7 @@ Wrap.prototype.html = function (htmlString) {
 Wrap.prototype.append = function (content) {
     if (this.ref) {
         if (content instanceof HTMLElement) {
-            //TODO add impl
+            this.ref.appendChild(content)
         } else {
             this.ref.innerHTML += content
         }

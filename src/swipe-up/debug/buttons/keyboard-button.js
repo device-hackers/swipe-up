@@ -4,8 +4,11 @@ import ControlButton from './control-button'
 export default class KeyboardButton extends ControlButton {
     constructor(debugWidget) {
         let selfName = 'keyboard'
-        super(selfName, `<input class='inputForKeyboard' tabindex='0'>` +
-            `<button class='${selfName}'>${selfName}</button>`)
+        let input = document.createElement('input')
+        input.setAttribute('class', 'inputForKeyboard')
+        input.setAttribute('tabindex', 0)
+        $('.debugButtons').append(input)
+        super(selfName)
 
         super.click( () => $('.inputForKeyboard').focus() )
     }
