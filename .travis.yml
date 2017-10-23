@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - stable
+script: npm run build
+branches:
+  only:
+  - master
+deploy:
+  provider: surge
+  project: ./dist/
+  domain: swipe-up.surge.sh
+  skip_cleanup: true
