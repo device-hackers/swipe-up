@@ -10,14 +10,19 @@ const localStorageDisableKey = 'SwipeUp._disabled'
 
 let win = new WeakMap()
 let swipeUpOverlay = new WeakMap()
+let swipeUpOverlayParentParent = new WeakMap()
+let swipeUpOverlayParent = new WeakMap()
 let debugWidget = new WeakMap()
 
 let showOrHide = (self) => {
     let disabled = (win.get(self).localStorage.getItem(localStorageDisableKey) === 'true')
 
     if (!disabled && self.browserUiState.state === 'COLLAPSED') {
+        //win.get(self).document.body.style.height = '100vh'
         swipeUpOverlay.get(self).style.display = 'block'
     } else if (swipeUpOverlay.get(self).style.display !== 'none') {
+        //win.get(self).innerHeight === 696 ?
+            win.get(self).document.body.style.height = win.get(self).innerHeight + 'px' //: null
         swipeUpOverlay.get(self).style.display = 'none'
     }
 }
@@ -28,9 +33,19 @@ export default class SwipeUp {
             throw new Error('Swipe Up should be instantiated on window load when DOM is ready')
         }
         win.set(this, windowObj)
+        //windowObj.document.body.style.height = windowObj.innerHeight + 'px'
+        swipeUpOverlayParentParent.set(this, win.get(this).document.createElement('div'))
+        swipeUpOverlayParentParent.get(this).className = 'swipeUpOverlayParentParent'
+
+        swipeUpOverlayParent.set(this, win.get(this).document.createElement('div'))
+        swipeUpOverlayParent.get(this).className = 'swipeUpOverlayParent'
+
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
         swipeUpOverlay.get(this).className = 'swipeUpOverlay'
         swipeUpOverlay.get(this).innerHTML = swipeUpText
+
+        //swipeUpOverlayParent.get(this).appendChild(swipeUpOverlay.get(this))
+        //swipeUpOverlayParentParent.get(this).appendChild(swipeUpOverlayParent.get(this))
 
         let debugWidgetTrigger = new DebugWidgetTrigger(this, swipeUpOverlay.get(this), win.get(this))
 
@@ -39,7 +54,6 @@ export default class SwipeUp {
         this.fscreen = this.browserUiState.fscreen
 
         win.get(this).document.body.appendChild(swipeUpOverlay.get(this))
-        showOrHide(this)
         debugWidgetTrigger.shouldShowWidgetOnLoad ? this.showDebugWidget() : null
 
         const resizeHandler = () => {

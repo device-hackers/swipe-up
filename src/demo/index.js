@@ -31,6 +31,7 @@ class SwipeUpDemo {
 
         window.addEventListener('load', () => {
             this.swipeUp = new SwipeUp(initialOrientation, window)
+            this.swipeUp.enable()
             //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
             this.updateUi()
 

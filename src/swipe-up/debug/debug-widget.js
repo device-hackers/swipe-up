@@ -75,6 +75,7 @@ export default class DebugWidget {
             `${devicePixelRatio} : ` +
             `${screenDimensions} : ` +
             `${windowDimensions} : ` +
+            `[${this._win.document.body.style.height}] : ` +
             `{${screenType} : ` +
             `${orientation}} : ` +
             `[${html5FullscreenIsAvailable} ` +
