@@ -35,8 +35,12 @@ class SwipeUpDemo {
     updateUi() {
         const write = this.write
         const userAgent = window.navigator.userAgent
-        const userAgentName = this.swipeUp.browserUiState._userAgentDetector.userAgent ? this.swipeUp.browserUiState._userAgentDetector.userAgent.toLowerCase() : '...'
-        const deviceName = this.swipeUp.browserUiState._provider._device ? this.swipeUp.browserUiState._provider._device.toLowerCase() : '...'
+
+        const userAgentName = this.swipeUp.browserUiState._userAgentDetector.userAgent ?
+            this.swipeUp.browserUiState._userAgentDetector.userAgent.toLowerCase() : '...'
+
+        const deviceName = this.swipeUp.browserUiState._provider._device ?
+            this.swipeUp.browserUiState._provider._device.toLowerCase() : '...'
 
         write('ver', version)
         write('userAgent', userAgent)
@@ -61,13 +65,13 @@ class SwipeUpDemo {
     }
 
     setViewportLegacy(scaleFactor) {
-        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, initial-scale=${scaleFactor}, ` +
-            `minimum-scale=${scaleFactor}, maximum-scale=${scaleFactor}`)
+        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, ` +
+            `initial-scale=${scaleFactor}, minimum-scale=${scaleFactor}, maximum-scale=${scaleFactor}`)
     }
 
     setViewportModern() {
-        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, width=device-width, ` +
-            `initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0`)
+        document.getElementById('meta-viewport').setAttribute('content', `user-scalable=no, ` +
+            `width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0`)
     }
 
     toggleDebugWidget() {

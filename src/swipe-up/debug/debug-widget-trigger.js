@@ -1,20 +1,22 @@
 const confirmDisableMessage = 'This will allow to disable Swipe Up on this browser. Select OK to disable.'
 const urlTriggerParam = 'debugInSwipeUp'
+const cornerThreshold = 100
+const timesQuickTap = 3
 
 export default class DebugWidgetTrigger {
     constructor (swipeUp, swipeUpOverlay, win) {
         this._shouldShowWidgetOnLoad = false
-        const isUrlTriggerParamPresent = (name) => new RegExp("[?&]" + name + "(?:$|=|&)", "i").test(win.location.search)
+        const isUrlTriggerParamPresent = (name) => new RegExp("[?&]" + name + "(?:$|=|&)", "i").
+                                                        test(win.location.search)
         isUrlTriggerParamPresent(urlTriggerParam) ? this._shouldShowWidgetOnLoad = true : null
 
         let quickTapDetected = 0
         let timerId, bottomRightTouched, topLeftTouched3Times, bottomLeftTouched, topRightTouched3Times
 
-        const threshold = 100
-        let isLeftTouched = (touch) => touch.clientX <= threshold
-        let isRightTouched = (touch) => touch.clientX >= win.innerWidth - threshold
-        let isTopTouched = (touch) => touch.clientY <= threshold
-        let isBottomTouched = (touch) => touch.clientY >= win.innerHeight - threshold
+        let isLeftTouched = (touch) => touch.clientX <= cornerThreshold
+        let isRightTouched = (touch) => touch.clientX >= win.innerWidth - cornerThreshold
+        let isTopTouched = (touch) => touch.clientY <= cornerThreshold
+        let isBottomTouched = (touch) => touch.clientY >= win.innerHeight - cornerThreshold
         let isTopLeftCornerTouched = (touch) => isTopTouched(touch) && isLeftTouched(touch)
         let isBottomRightCornerTouched = (touch) => isBottomTouched(touch) && isRightTouched(touch)
         let isTopRightCornerTouched = (touch) => isTopTouched(touch) && isRightTouched(touch)
@@ -31,7 +33,6 @@ export default class DebugWidgetTrigger {
                 if (topLeftTouched3Times && bottomRightTouched) {
                     swipeUp.showDebugWidget()
                 } else if (topRightTouched3Times && bottomLeftTouched && confirm(confirmDisableMessage)) {
-                    win.localStorage.setItem('SwipeUp._disabled', 'true')
                     swipeUp.disable()
                 }
             }
@@ -39,25 +40,23 @@ export default class DebugWidgetTrigger {
 
         let process_touch = (touch) => {
             if (isTopLeftCornerTouched(touch)) {
-                detectQuickTaps(topLeftTouched3Times)
+                topLeftTouched3Times = detectQuickTaps()
             } else if (isBottomRightCornerTouched(touch)) {
                 bottomRightTouched = true
             } else if (isTopRightCornerTouched(touch)) {
-                detectQuickTaps(topRightTouched3Times)
+                topRightTouched3Times = detectQuickTaps()
             } else if (isBottomLeftCornerTouched(touch)) {
                 bottomLeftTouched = true
             }
         }
 
-        function detectQuickTaps(target) {
+        let detectQuickTaps = (target) => {
             quickTapDetected++
 
             if (timerId) clearTimeout(timerId)
             timerId = setTimeout(() => quickTapDetected = 0, 250)
 
-            if (quickTapDetected >= 3) {
-                target = true
-            }
+            return quickTapDetected >= timesQuickTap;
         }
 
         swipeUpOverlay.addEventListener('touchstart', process_touchstart, false)
