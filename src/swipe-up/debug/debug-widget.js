@@ -88,11 +88,13 @@ export default class DebugWidget {
             `${this._win.document.body.style.height} : ` +
             `${this._win.document.body.clientHeight} : ` +
             `${this._win.document.body.offsetHeight} : ` +
-            `${this._win.document.body.scrollHeight}<br>` +
+            `${this._win.document.body.scrollHeight} | ` +
             `${this._win.document.documentElement.style.height} : ` +
             `${this._win.document.documentElement.clientHeight} : ` +
             `${this._win.document.documentElement.offsetHeight} : ` +
-            `${this._win.document.documentElement.scrollHeight}<br>`
+            `${this._win.document.documentElement.scrollHeight} | ` +
+            `${this._win.getComputedStyle(document.body).height} : ` +
+            `${this._win.getComputedStyle(document.documentElement).height}<br>`
     }
 
     get recordUserAgent() {
