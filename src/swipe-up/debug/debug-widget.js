@@ -75,7 +75,6 @@ export default class DebugWidget {
             `${devicePixelRatio} : ` +
             `${screenDimensions} : ` +
             `${windowDimensions} : ` +
-            `[${this._win.document.body.style.height}] : ` +
             `{${screenType} : ` +
             `${orientation}} : ` +
             `[${html5FullscreenIsAvailable} ` +
@@ -85,7 +84,15 @@ export default class DebugWidget {
             `${collapsedThreshold} : ` +
             `<b>${deviation}</b> : ` +
             `${keyboardThreshold} : ` +
-            `<span class='state'>${state}</span>`
+            `<span class='state'>${state}</span><br>` +
+            `${this._win.document.body.style.height} : ` +
+            `${this._win.document.body.clientHeight} : ` +
+            `${this._win.document.body.offsetHeight} : ` +
+            `${this._win.document.body.scrollHeight}<br>` +
+            `${this._win.document.documentElement.style.height} : ` +
+            `${this._win.document.documentElement.clientHeight} : ` +
+            `${this._win.document.documentElement.offsetHeight} : ` +
+            `${this._win.document.documentElement.scrollHeight}<br>`
     }
 
     get recordUserAgent() {
