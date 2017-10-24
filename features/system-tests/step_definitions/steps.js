@@ -34,6 +34,16 @@ defineSupportCode(function(context) {
             createElement(element){
                 let obj = {}
                 obj.addEventListener = function () { /*NOOP*/ }
+                obj.appendChild = function () { /*NOOP*/ }
+                obj.style = {
+                    display : ''
+                }
+                return obj
+            },
+            querySelector(){
+                let obj = {}
+                obj.addEventListener = function () { /*NOOP*/ }
+                obj.appendChild = function () { /*NOOP*/ }
                 obj.style = {
                     display : ''
                 }

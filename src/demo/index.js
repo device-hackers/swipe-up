@@ -37,6 +37,11 @@ class SwipeUpDemo {
 
             document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
+
+            document.getElementById('debug1').addEventListener('click',
+                    event => document.body.style.height = window.innerHeight + 'px')
+            document.getElementById('debug2').addEventListener('click',
+                    event => document.querySelector('.swipeUpOverlayParent').style.display = 'none')
         })
 
         const resizeHandler = () => {
