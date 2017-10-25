@@ -12,7 +12,8 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
         library: 'SwipeUp',
-        libraryTarget: 'var'
+        libraryTarget: 'umd',
+        libraryExport: "default"
     },
     module: {
         rules: [
