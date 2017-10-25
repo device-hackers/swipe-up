@@ -12,7 +12,7 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
         library: 'SwipeUp',
-        libraryTarget: 'umd'
+        libraryTarget: 'var'
     },
     module: {
         rules: [
