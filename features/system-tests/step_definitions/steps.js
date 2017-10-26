@@ -31,7 +31,7 @@ defineSupportCode(function(context) {
             documentElement: {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }
             },
-            createElement(element){
+            createElement(element) {
                 let obj = {}
                 obj.addEventListener = function () { /*NOOP*/ }
                 obj.appendChild = function () { /*NOOP*/ }
@@ -40,13 +40,18 @@ defineSupportCode(function(context) {
                 }
                 return obj
             },
-            querySelector(){
+            querySelector() {
                 let obj = {}
                 obj.addEventListener = function () { /*NOOP*/ }
                 obj.appendChild = function () { /*NOOP*/ }
                 obj.style = {
                     display : ''
                 }
+                return obj
+            },
+            createDocumentFragment() {
+                let obj = {}
+                obj.innerHTML = ''
                 return obj
             }
         },
@@ -74,7 +79,7 @@ defineSupportCode(function(context) {
 
     Given('a user agent equals to {string}', function(userAgent) {
         this.win.navigator.userAgent = userAgent
-        this.swipeUp = new SwipeUp('LANDSCAPE', this.win)
+        this.swipeUp = new SwipeUp(null, 'LANDSCAPE', this.win)
         this.win.orientation = 90
     })
 

@@ -26,6 +26,7 @@ BUTTON {
 .wrapper {
     padding-left: 50px;
     padding-top: 20px;
+    position: fixed;
 }
 
 #userAgent {
@@ -51,7 +52,7 @@ BUTTON {
     left: 0;
     width: 100%;
     height: 200vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    /*background-color: rgba(0, 0, 0, 0.5);*/
     color: white;
     display: none;
     z-index: 999;
@@ -64,12 +65,33 @@ BUTTON {
     /*pointer-events: none;*/
 }
 
+.fixed {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    padding-top: 20%;
+    font-size: 3vmax;
+}
+
+.myModal {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: blue;
+    top: 25%;
+    left: 25%;
+    text-align: center;
+    color: white;
+}
+
 .debugWidget {
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid black;
     color: white;
     position: fixed;
-    top: 5px;
+    top: 150px;
     left: 5px;
     right: 5px;
     padding: 5px;
