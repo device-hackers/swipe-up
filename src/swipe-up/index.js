@@ -19,6 +19,7 @@ let showOrHide = (self) => {
 
     if (!disabled && self.browserUiState.state === 'COLLAPSED') {
         $(swipeUpOverlay.get(self)).show()
+        win.get(self).scrollTo(0, 0) //TODO make optional
     } else if (swipeUpOverlay.get(self).style.display !== 'none') {
         $(swipeUpOverlay.get(self)).hide()
     }
@@ -34,6 +35,7 @@ export default class SwipeUp {
         if (anElementToFix) {
             elementToFix.set(this, anElementToFix)
         }
+        //TODO make below optional
         Array.from(win.get(this).document.body.children).forEach((el) => el.style.position = 'fixed')
 
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
@@ -56,12 +58,12 @@ export default class SwipeUp {
 
         new EventThrottle('resize', 'optimizedResize', win.get(this))
         new EventThrottle('orientationchange', 'optimizedOrientationchange', win.get(this))
-        new EventThrottle('scroll', 'optimizedScroll', win.get(this))
-        new EventThrottle('touchmove', 'optimizedTouchmove', win.get(this))
+        //new EventThrottle('scroll', 'optimizedScroll', win.get(this))
+        //new EventThrottle('touchmove', 'optimizedTouchmove', win.get(this))
         win.get(this).addEventListener('optimizedResize', resizeHandler)
         win.get(this).addEventListener('optimizedOrientationchange', resizeHandler)
-        win.get(this).addEventListener('optimizedScroll', resizeHandler)
-        win.get(this).addEventListener('optimizedTouchmove', resizeHandler)
+        //win.get(this).addEventListener('optimizedScroll', resizeHandler)
+        //win.get(this).addEventListener('optimizedTouchmove', resizeHandler)
     }
 
     get isShown() {
