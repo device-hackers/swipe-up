@@ -13,23 +13,16 @@ let win = new WeakMap()
 let swipeUpOverlay = new WeakMap()
 let debugWidget = new WeakMap()
 let elementToFix = new WeakMap()
-let elementToFixInitialPosition = new WeakMap()
 
 let showOrHide = (self) => {
     let disabled = (win.get(self).localStorage.getItem(localStorageDisableKey) === 'true')
 
     if (!disabled && self.browserUiState.state === 'COLLAPSED') {
         $(swipeUpOverlay.get(self)).show()
-    } else if (swipeUpOverlay.get(self).style.display !== 'none' &&
-                self.browserUiState.state === 'EXPANDED') {
-        win.get(self).document.body.style.height = `${getScreenHeight(self) + 600}px`//TODO add this to all cases
+    } else if (swipeUpOverlay.get(self).style.display !== 'none') {
         $(swipeUpOverlay.get(self)).hide()
     }
 }
-
-let getScreenHeight = (self) => self.browserUiState.orientation === 'PORTRAIT' ?
-    Math.max(win.get(self).screen.width, win.get(self).screen.height) :
-    Math.min(win.get(self).screen.width, win.get(self).screen.height)
 
 export default class SwipeUp {
     constructor(anElementToFix = null, initialOrientation = null, windowObj = window) {
@@ -40,8 +33,8 @@ export default class SwipeUp {
 
         if (anElementToFix) {
             elementToFix.set(this, anElementToFix)
-            elementToFixInitialPosition.set(this, anElementToFix.style.position)
         }
+        Array.from(win.get(this).document.body.children).forEach((el) => el.style.position = 'fixed')
 
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
         swipeUpOverlay.get(this).className = 'swipeUpOverlay'
@@ -61,47 +54,14 @@ export default class SwipeUp {
             debugWidget.get(this) ? debugWidget.get(this).update() : null
         }
 
-        const touchStartHandler = (event) => {
-            elementToFix.get(this) ?
-                elementToFix.get(this).style.position = 'fixed' : null
-            showOrHide(this)
-            debugWidget.get(this) ? debugWidget.get(this).update() : null
-        }
-        let timer
-        const touchMoveHandler = (event) => {
-            elementToFix.get(this) ?
-                elementToFix.get(this).style.position = 'fixed' : null
-
-            if (timer) {
-                clearTimeout(timer)
-            } else {
-                timer = setTimeout(() => {
-                    elementToFix.get(this) ?
-                        elementToFix.get(this).style.position = elementToFixInitialPosition.get(this) : null
-                }, 500)
-            }
-            showOrHide(this)
-            debugWidget.get(this) ? debugWidget.get(this).update() : null
-        }
-
-        const touchEndHandler = (event) => {
-            elementToFix.get(this) ?
-                elementToFix.get(this).style.position = elementToFixInitialPosition.get(this) : null
-            showOrHide(this)
-            debugWidget.get(this) ? debugWidget.get(this).update() : null
-        }
-
         new EventThrottle('resize', 'optimizedResize', win.get(this))
+        new EventThrottle('orientationchange', 'optimizedOrientationchange', win.get(this))
         new EventThrottle('scroll', 'optimizedScroll', win.get(this))
-        new EventThrottle('touchstart', 'optimizedTouchstart', win.get(this))
         new EventThrottle('touchmove', 'optimizedTouchmove', win.get(this))
-        new EventThrottle('touchend', 'optimizedTouchend', win.get(this))
         win.get(this).addEventListener('optimizedResize', resizeHandler)
-        win.get(this).addEventListener('orientationchange', resizeHandler)
+        win.get(this).addEventListener('optimizedOrientationchange', resizeHandler)
         win.get(this).addEventListener('optimizedScroll', resizeHandler)
-        win.get(this).addEventListener('optimizedTouchstart', touchStartHandler)
-        win.get(this).addEventListener('optimizedTouchmove', touchMoveHandler)
-        win.get(this).addEventListener('optimizedTouchend', touchEndHandler)
+        win.get(this).addEventListener('optimizedTouchmove', resizeHandler)
     }
 
     get isShown() {
@@ -109,11 +69,15 @@ export default class SwipeUp {
     }
 
     disable() {
+        //TODO maybe store initial position of root body elems and body height and restore on disable?
         win.get(this).localStorage.setItem(localStorageDisableKey, 'true')
         showOrHide(this)
     }
 
     enable() {
+        //TODO findout when and why CP got position:absolute override for #app
+        //Array.from(win.get(this).document.body.children).forEach((el) => el.style.position = 'fixed')
+        win.get(this).document.body.style.height = '110vh' //Required for Safari portrait
         win.get(this).localStorage.setItem(localStorageDisableKey, 'false')
         showOrHide(this)
     }

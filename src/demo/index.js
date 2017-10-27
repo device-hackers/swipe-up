@@ -38,16 +38,11 @@ class SwipeUpDemo {
             document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
 
-            document.getElementById('debug1').addEventListener('click',
-                    event => document.querySelector('.swipeUpOverlay').style.display = 'block')
+            document.getElementById('debug1').addEventListener('click', event =>
+                document.querySelector('.swipeUpOverlay').style.display = 'block')
 
-            document.getElementById('debug2').addEventListener('click', event => {
-                let height = this.swipeUp.browserUiState.orientation === 'PORTRAIT' ?
-                    Math.max(screen.width, screen.height) :
-                    Math.min(screen.width, screen.height)
-                document.body.style.height = height + 'px'
-                document.querySelector('.swipeUpOverlay').style.display = 'none'
-            })
+            document.getElementById('debug2').addEventListener('click', event =>
+                document.querySelector('.swipeUpOverlay').style.display = 'none')
         })
 
         const resizeHandler = () => {

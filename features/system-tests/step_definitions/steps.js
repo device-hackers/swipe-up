@@ -26,7 +26,8 @@ defineSupportCode(function(context) {
         },
         document: {
             body: {
-                appendChild(element) { /*NOOP*/ }
+                appendChild(element) { /*NOOP*/ },
+                children: [{style:{position:''}}]
             },
             documentElement: {
                 addEventListener(type, listener, useCapture) { /*NOOP*/ }

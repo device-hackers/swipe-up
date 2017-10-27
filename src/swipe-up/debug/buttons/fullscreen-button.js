@@ -11,15 +11,15 @@ export default class FullScreenButton extends ControlButton {
 
             if (fscreen.fullscreenElement) {
                 fscreen.exitFullscreen()
-                self.style.backgroundImage = 'url("assets/fullscreen-enter.png")'
+                $(self).html('fullscreen')
             } else {
                 fscreen.requestFullscreen(debugWidget._win.document.documentElement)
-                self.style.backgroundImage = 'url("assets/fullscreen-exit.png")'
+                $(self).html('exit')
             }
         } )
 
         if (!fscreen.fullscreenEnabled) {
-            $('.fullscreen').classList.add('disabled')
+            $('.fullscreen-button').classList.add('disabled')
         }
     }
 }

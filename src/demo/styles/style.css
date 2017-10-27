@@ -26,7 +26,6 @@ BUTTON {
 .wrapper {
     padding-left: 50px;
     padding-top: 20px;
-    position: fixed;
 }
 
 #userAgent {
@@ -52,7 +51,6 @@ BUTTON {
     left: 0;
     width: 100%;
     height: 200vh;
-    /*background-color: rgba(0, 0, 0, 0.5);*/
     color: white;
     display: none;
     z-index: 999;
@@ -75,23 +73,12 @@ BUTTON {
     font-size: 3vmax;
 }
 
-.myModal {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: blue;
-    top: 25%;
-    left: 25%;
-    text-align: center;
-    color: white;
-}
-
 .debugWidget {
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid black;
     color: white;
     position: fixed;
-    top: 150px;
+    top: 5px;
     left: 5px;
     right: 5px;
     padding: 5px;
@@ -134,12 +121,10 @@ BUTTON {
 }
 
 .debugButtons button {
-    background: transparent url('../assets/email.png') no-repeat top;
     border: 1px solid silver;
-    height: 5.5em;
-    line-height: 9em;
+    background-color: transparent;
     color: white;
-    font-size: 1em;
+    font-size: 2em;
     padding: 0;
     flex: 1 1 auto;
     margin-left: 5px;
@@ -156,30 +141,4 @@ BUTTON {
     background-color: transparent;
     padding: 0;
     margin: 0;
-}
-
-/*https://www.flaticon.com/free-icon/keyboard_181827#term=keyboard&page=1&position=32*/
-.debugButtons button.keyboard {
-    background-image: url('../assets/keyboard.png');
-    background-size: 4em;
-}
-
-.debugButtons button.refresh {
-    background-image: url('../assets/refresh.png');
-    background-size: 4em;
-}
-
-.debugButtons button.fullscreen {
-    background-image: url('../assets/fullscreen-enter.png');
-    background-size: 4em;
-}
-
-.debugButtons button.email {
-    background-image: url('../assets/email.png');
-    background-size: 4em;
-}
-
-.debugButtons button.disable {
-    background-image: url('../assets/remove.png');
-    background-size: 4em;
 }
