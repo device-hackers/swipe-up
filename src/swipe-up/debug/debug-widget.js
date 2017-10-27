@@ -5,6 +5,7 @@ import RefreshButton from './buttons/refresh-button'
 import FullScreenButton from './buttons/fullscreen-button'
 import EmailButton from './buttons/email-button'
 import DisableButton from './buttons/disable-button'
+import HideButton from './buttons/hide-button'
 import CloseMeButton from './buttons/close-me-button'
 
 export default class DebugWidget {
@@ -33,6 +34,7 @@ export default class DebugWidget {
         new FullScreenButton(this)
         new EmailButton(this)
         new DisableButton(this, swipeUp)
+        new HideButton(this, swipeUp)
     }
 
     update() {

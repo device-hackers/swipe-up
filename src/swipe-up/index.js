@@ -35,8 +35,10 @@ export default class SwipeUp {
         if (anElementToFix) {
             elementToFix.set(this, anElementToFix)
         }
+        //TODO findout when and why CP got position:absolute override for #app
         //TODO make below optional
         Array.from(win.get(this).document.body.children).forEach((el) => el.style.position = 'fixed')
+        win.get(this).document.body.style.height = '110vh' //Required for Safari portrait
 
         swipeUpOverlay.set(this, win.get(this).document.createElement('div'))
         swipeUpOverlay.get(this).className = 'swipeUpOverlay'
@@ -71,16 +73,10 @@ export default class SwipeUp {
     }
 
     disable() {
-        //TODO maybe store initial position of root body elems and body height and restore on disable?
-        win.get(this).localStorage.setItem(localStorageDisableKey, 'true')
         showOrHide(this)
     }
 
     enable() {
-        //TODO findout when and why CP got position:absolute override for #app
-        //Array.from(win.get(this).document.body.children).forEach((el) => el.style.position = 'fixed')
-        win.get(this).document.body.style.height = '110vh' //Required for Safari portrait
-        win.get(this).localStorage.setItem(localStorageDisableKey, 'false')
         showOrHide(this)
     }
 
