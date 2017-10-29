@@ -30,6 +30,9 @@ class SwipeUpDemo {
             document.querySelector('#excludedUserAgents').addEventListener('click', event => {
                 applyNewOptions({ excludedUserAgents: new RegExp('Nexus 5', 'i') })
             })
+            document.querySelector('#useTextInsteadOfImages').addEventListener('click', event => {
+                applyNewOptions({ useTextInsteadOfImages: true })
+            })
         })
 
         let disposeSwipeUp = () => {
