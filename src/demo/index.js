@@ -33,6 +33,10 @@ class SwipeUpDemo {
             document.querySelector('#useTextInsteadOfImages').addEventListener('click', event => {
                 applyNewOptions({ useTextInsteadOfImages: true })
             })
+            document.querySelector('#customTexts').addEventListener('click', event => {
+                applyNewOptions({ swipeUpText: 'Bla-bla custom swipe up text',
+                    html5FullScreenText: 'Bla-bla custom HTML5 full screen text' })
+            })
         })
 
         let disposeSwipeUp = () => {
