@@ -14,6 +14,7 @@ const expandBodyHeightTo = '110vh'
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
 
 //TODO add styles overrides, add switch to override or init styles
+//TODO replace words with pictures for swipe up and html5 full screen
 const defaultOptions = {
     initialOrientation: null,
     bodyBehavior: null, //['fixateRootElementsOnInit'|'scrollWindowToTopOnShow']

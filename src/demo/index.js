@@ -11,6 +11,8 @@ class SwipeUpDemo {
 
             document.querySelector('#toggleViewport').addEventListener('click', event => this.toggleViewport())
             document.querySelector('#toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
+            document.querySelector('#toggleEnableDisable').addEventListener('click', event =>
+                this.swipeUp.isEnabled ? this.swipeUp.disable() : this.swipeUp.enable())
 
             document.querySelector('#initialOrientation').addEventListener('click', event => {
                 let initialOrientation = window.innerWidth > window.innerHeight ? 'LANDSCAPE' : 'PORTRAIT'
