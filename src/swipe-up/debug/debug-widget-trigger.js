@@ -1,3 +1,5 @@
+import detectPassiveEvents from 'detect-passive-events';
+
 const confirmDisableMessage = 'This will allow to disable Swipe Up on this browser. Select OK to disable.'
 const urlTriggerParam = 'debugInSwipeUp'
 const cornerThreshold = 100
@@ -5,9 +7,14 @@ const timesQuickTap = 3
 
 export default class DebugWidgetTrigger {
     constructor (swipeUp, swipeUpOverlay, win) {
+        if (swipeUp.browserUiState.state === 'DESKTOP' ||
+            swipeUp.browserUiState.state === 'DESKTOP_HTML5_FULLSCREEN') return
+
         this._shouldShowWidgetOnLoad = false
-        const isUrlTriggerParamPresent = (name) => new RegExp("[?&]" + name + "(?:$|=|&)", "i").
-                                                        test(win.location.search)
+
+        const isUrlTriggerParamPresent = (name) =>
+            new RegExp("[?&]" + name + "(?:$|=|&)", "i").test(win.location.search)
+
         isUrlTriggerParamPresent(urlTriggerParam) ? this._shouldShowWidgetOnLoad = true : null
 
         let quickTapDetected = 0
@@ -59,7 +66,8 @@ export default class DebugWidgetTrigger {
             return quickTapDetected >= timesQuickTap;
         }
 
-        swipeUpOverlay.addEventListener('touchstart', process_touchstart, false)
+        swipeUpOverlay.addEventListener('touchstart', process_touchstart,
+            detectPassiveEvents.hasSupport ? { capture: false, passive: true } : false )
     }
 
     get shouldShowWidgetOnLoad() {

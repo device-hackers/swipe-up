@@ -11,18 +11,6 @@ H3 {
     margin-top: 30px;
 }
 
-INPUT {
-    width: 150px;
-    border: 1px solid cadetblue;
-    margin-bottom: 5px;
-    margin-top: 5px;
-}
-
-BUTTON {
-    border: 1px solid maroon;
-    margin-left: 5px;
-}
-
 .wrapper {
     padding-left: 50px;
     padding-top: 20px;
@@ -39,38 +27,64 @@ BUTTON {
     margin-left: 5px;
 }
 
-.inputForKeyboardOnDemo, #toggleViewport, #toggleDebugWidget {
+.inputForKeyboardOnDemo, .demoButton {
     height: 45px;
-    font-size: 14px
+    font-size: 14px;
+    border: 1px solid maroon;
+    margin: 5px;
+}
+
+.inputForKeyboardOnDemo {
+    width: 150px;
+    border: 1px solid cadetblue;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.options {
+    border: 1px dashed gray;
+    background-color: silver;
+}
+
+.options P {
+    margin: 0;
+}
+
+.options .demoButton {
+    height: 30px;
 }
 
 /* ========= Swipe up styles ========= */
 .swipeUpOverlay {
+    display: none;
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 200vh;
-    color: white;
-    display: none;
+    top: 0;
+    left: 0;
     z-index: 999;
-    text-align: center;
     padding-top: 21%;
+    color: white;
+    text-align: center;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    /*pointer-events: none;*/
 }
 
-.fixed {
+.fixedFlexBox {
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
     width: 100%;
     height: 100%;
     top: 0;
-    padding-top: 20%;
+    background-color: rgba(0, 0, 0, 0.5);
     font-size: 3vmax;
+}
+
+.content {
+    width: 100%;
 }
 
 .debugWidget {
@@ -104,13 +118,6 @@ BUTTON {
     margin-right: 10px;
 }
 
-.state {
-    border: 1px solid silver;
-    font-weight: bold;
-    padding-left: 2px;
-    padding-right: 2px;
-}
-
 .debugUserAgent {
     font-size: 0.9em;
 }
@@ -124,8 +131,8 @@ BUTTON {
     border: 1px solid silver;
     background-color: transparent;
     color: white;
-    font-size: 2em;
-    padding: 0;
+    font-size: 1.5em;
+    padding: 0.3em;
     flex: 1 1 auto;
     margin-left: 5px;
     margin-right: 5px;

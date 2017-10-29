@@ -1,54 +1,49 @@
 import {version, dependencies} from '../../package.json'
 import SwipeUp from '../swipe-up/index'
 
-class EventThrottle {
-    constructor(type, name, win, obj) {
-        obj = obj || win
-        let running = false
-
-        let dispatchFunction = () => {
-            obj.dispatchEvent(new CustomEvent(name))
-            running = false
-        }
-
-        let wrapperFunction = () => {
-            if (running) return
-            running = true
-            if (win.requestAnimationFrame) {
-                win.requestAnimationFrame(dispatchFunction)
-            } else {
-                setTimeout(dispatchFunction, 66)
-            }
-        }
-
-        obj.addEventListener(type, wrapperFunction)
-    }
-}
-
 class SwipeUpDemo {
     constructor() {
-        let initialOrientation = window.innerWidth > window.innerHeight ? 'LANDSCAPE' : 'PORTRAIT'
-
         window.addEventListener('load', () => {
-            this.swipeUp = new SwipeUp(null, initialOrientation, window)
+            this.swipeUp = new SwipeUp(null, window)
             this.swipeUp.enable()
             //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
-            this.updateUi()
+            this.renderUi()
 
-            document.getElementById('toggleViewport').addEventListener('click', event => this.toggleViewport())
-            document.getElementById('toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
+            document.querySelector('#toggleViewport').addEventListener('click', event => this.toggleViewport())
+            document.querySelector('#toggleDebugWidget').addEventListener('click', event => this.toggleDebugWidget())
+
+            document.querySelector('#initialOrientation').addEventListener('click', event => {
+                let initialOrientation = window.innerWidth > window.innerHeight ? 'LANDSCAPE' : 'PORTRAIT'
+                applyNewOptions({ initialOrientation })
+            })
+            document.querySelector('#fixateRootElementsOnInit').addEventListener('click', event => {
+                applyNewOptions({ bodyBehavior: 'fixateRootElementsOnInit' })
+            })
+            document.querySelector('#scrollWindowToTopOnShow').addEventListener('click', event => {
+                applyNewOptions({ bodyBehavior: 'scrollWindowToTopOnShow' })
+            })
+            document.querySelector('#useHtml5FullScreenWhenPossible').addEventListener('click', event => {
+                applyNewOptions({ useHtml5FullScreenWhenPossible: false })
+            })
+            document.querySelector('#excludedUserAgents').addEventListener('click', event => {
+                applyNewOptions({ excludedUserAgents: new RegExp('Nexus 5', 'i') })
+            })
         })
 
-        const resizeHandler = () => {
-            this.updateUi()
+        let disposeSwipeUp = () => {
+            document.querySelector('.swipeUpOverlay').remove()
+            document.querySelector('.debugWidget').remove()
+            this.swipeUp = null
         }
 
-        new EventThrottle('resize', 'optimizedResize', window)
-        window.addEventListener('optimizedResize', resizeHandler)
-        window.addEventListener('orientationchange', resizeHandler)
+        let applyNewOptions = (options) => {
+            disposeSwipeUp()
+            this.swipeUp = new SwipeUp(options, window)
+            this.swipeUp.enable()
+        }
     }
 
-    updateUi() {
+    renderUi() {
         const write = this.write
         const userAgent = window.navigator.userAgent
 

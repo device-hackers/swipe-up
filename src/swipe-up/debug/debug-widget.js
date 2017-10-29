@@ -86,7 +86,7 @@ export default class DebugWidget {
             `${collapsedThreshold} : ` +
             `<b>${deviation}</b> : ` +
             `${keyboardThreshold} : ` +
-            `<span class='state'>${state}</span><br>` +
+            `<u><b>${state}</u></b><br>` +
             `${this._win.document.body.style.height} : ` +
             `${this._win.document.body.clientHeight} : ` +
             `${this._win.document.body.offsetHeight} : ` +

@@ -64,7 +64,11 @@ defineSupportCode(function(context) {
             setItem(item, value) { /*NOOP*/ }
         },
         addEventListener(type, listener, useCapture) { /*NOOP*/ },
-        dispatchEvent(event) { /*NOOP*/ }
+        dispatchEvent(event) { /*NOOP*/ },
+        HTMLElement: {}.constructor,
+        HTMLCollection: {}.constructor,
+        NodeList: {}.constructor,
+        Array: {}.constructor
     }
 
     CustomWorld.prototype.swipeUp = null
@@ -83,7 +87,7 @@ defineSupportCode(function(context) {
 
     Given('a user agent equals to {string}', function(userAgent) {
         this.win.navigator.userAgent = userAgent
-        this.swipeUp = new SwipeUp(null, 'LANDSCAPE', this.win)
+        this.swipeUp = new SwipeUp({ initialOrientation: 'LANDSCAPE' }, this.win)
         this.win.orientation = 90
     })
 
