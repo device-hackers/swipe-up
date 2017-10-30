@@ -14,6 +14,7 @@ let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMa
 //TODO add styles overrides, + add switch to override or init styles
 const defaultOptions = {
     initialOrientation: null,
+    addImportantToBodyHeight: false, //Some Web apps use importants like: body {height:100% !important}, so this to allow them to override this to add important rule as well
     fixateRootElementsOnInit: false,
     scrollWindowToTopOnShow: false,
     useHtml5FullScreenWhenPossible: true, //fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
@@ -64,7 +65,11 @@ export default class SwipeUp {
             let useHtml5FullScreen = options.useHtml5FullScreenWhenPossible && this.fscreen.fullscreenEnabled
             if (!useHtml5FullScreen) {
                 fixateRootElementsIfNeeded(this)
-                win.document.body.style.height = expandBodyHeightTo //Required for Safari portrait
+
+                //Required for Safari portrait
+                options.addImportantToBodyHeight ?
+                win.document.body.style.setProperty('height', expandBodyHeightTo, 'important') :
+                win.document.body.style.setProperty('height', expandBodyHeightTo)
             }
 
             let useTextInsteadOfImages = options.useTextInsteadOfImages

@@ -29,7 +29,8 @@ defineSupportCode(function(context) {
                 appendChild(element) { /*NOOP*/ },
                 children: [{style:{position:''}}],
                 style: {
-                    height: ''
+                    height: '',
+                    setProperty() { /*NOOP*/ }
                 }
             },
             documentElement: {
