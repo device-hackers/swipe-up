@@ -11,11 +11,12 @@ const expandBodyHeightTo = '110vh'
 //win is a shortcut for window
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
 
-//TODO add styles overrides, add switch to override or init styles
+//TODO add styles overrides, + add switch to override or init styles
 const defaultOptions = {
     initialOrientation: null,
-    bodyBehavior: null, //['fixateRootElementsOnInit'|'scrollWindowToTopOnShow']
-    useHtml5FullScreenWhenPossible: true, //bodyBehavior has no meaning for user-agents capable of HTML5 Fullscreen API
+    fixateRootElementsOnInit: false,
+    scrollWindowToTopOnShow: false,
+    useHtml5FullScreenWhenPossible: true, //fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
     excludedUserAgents: null,
     useTextInsteadOfImages: false,
     swipeUpText: 'Swipe up to continue in full-screen mode',
@@ -28,7 +29,7 @@ let showOrHide = (self) => {
 
     if (!disabledInDebugging && self.isEnabled && self.browserUiState.state === 'COLLAPSED') {
         $(swipeUpOverlay).show()
-        options.bodyBehavior === 'scrollWindowToTopOnShow' ? win.scrollTo(0, 0) : null
+        options.scrollWindowToTopOnShow ? win.scrollTo(0, 0) : null
     } else if (swipeUpOverlay.style.display !== 'none') {
         $(swipeUpOverlay).hide()
     }
@@ -36,11 +37,13 @@ let showOrHide = (self) => {
 
 //TODO findout when and why CP got position:absolute override for #app
 let fixateRootElementsIfNeeded = (self) => {
-    if (_options.get(self).bodyBehavior === 'fixateRootElementsOnInit') {
+    if (_options.get(self).fixateRootElementsOnInit) {
         Array.from(_win.get(self).document.body.children).forEach((el) => el.style.position = 'fixed')
     }
 }
 
+//TODO fix Safari portrait not swiping on CP loading screen
+//TODO fix Safari sometimes not showing swipe up even though debug widget get resize event
 export default class SwipeUp {
     constructor(opts, windowObj = window) {
         if (!windowObj.document.body) {

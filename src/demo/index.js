@@ -19,10 +19,10 @@ class SwipeUpDemo {
                 applyNewOptions({ initialOrientation })
             })
             document.querySelector('#fixateRootElementsOnInit').addEventListener('click', event => {
-                applyNewOptions({ bodyBehavior: 'fixateRootElementsOnInit' })
+                applyNewOptions({ fixateRootElementsOnInit: true })
             })
             document.querySelector('#scrollWindowToTopOnShow').addEventListener('click', event => {
-                applyNewOptions({ bodyBehavior: 'scrollWindowToTopOnShow' })
+                applyNewOptions({ scrollWindowToTopOnShow: true })
             })
             document.querySelector('#useHtml5FullScreenWhenPossible').addEventListener('click', event => {
                 applyNewOptions({ useHtml5FullScreenWhenPossible: false })

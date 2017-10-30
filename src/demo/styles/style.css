@@ -63,7 +63,6 @@ H3 {
     top: 0;
     left: 0;
     z-index: 999;
-    padding-top: 21%;
     color: white;
     text-align: center;
     -webkit-user-select: none;
@@ -77,10 +76,10 @@ H3 {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100%;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    height: 140%; /* this and below are needed for Safari portrait otherwise the will be a 'gap' after swipe up */
+    top: -20%;
     font-size: 3vmax;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .content {
@@ -162,19 +161,19 @@ H3 {
 
 @-webkit-keyframes movingHand {
     0% {
-        top: 85%
+        top: 75%
     }
     100% {
-        top: 15%
+        top: 25%
     }
 }
 
 @keyframes movingHand {
     0% {
-        top: 85%
+        top: 75%
     }
     100% {
-        top: 15%
+        top: 25%
     }
 }
 
@@ -282,24 +281,6 @@ H3 {
     }
 }
 
-@-webkit-keyframes swipeup {
-    from {
-        bottom: 0
-    }
-    to {
-        bottom: 30px
-    }
-}
-
-@keyframes swipeup {
-    from {
-        bottom: 0
-    }
-    to {
-        bottom: 30px
-    }
-}
-
 /* --------------------------------------------------------------- */
 
 .debugWidget {
@@ -307,7 +288,7 @@ H3 {
     border: 1px solid black;
     color: white;
     position: fixed;
-    top: 5px;
+    top: 150px;
     left: 5px;
     right: 5px;
     padding: 5px;
