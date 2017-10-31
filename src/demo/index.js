@@ -4,7 +4,7 @@ import SwipeUp from '../swipe-up/index'
 class SwipeUpDemo {
     constructor() {
         window.addEventListener('load', () => {
-            this.swipeUp = new SwipeUp({useHtml5FullScreenWhenPossible: false}, window)
+            this.swipeUp = new SwipeUp({useHtml5FullScreenWhenPossible: false, scrollWindowToTopOnShow: true}, window)
             this.swipeUp.enable()
             //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
             this.renderUi()
@@ -35,11 +35,19 @@ class SwipeUpDemo {
             })
             document.querySelector('#customTexts').addEventListener('click', event => {
                 applyNewOptions({ swipeUpText: 'Bla-bla custom swipe up text',
-                    html5FullScreenText: 'Bla-bla custom HTML5 full screen text' })
+                                  html5FullScreenText: 'Bla-bla custom HTML5 full screen text' })
+            })
+            document.querySelector('#customCSS').addEventListener('click', event => {
+                applyNewOptions({ customCSS: '.fixedFlexBox { background-color: rgba(0, 0, 50, 0.7) }' })
+            })
+            document.querySelector('#customCSSCleanSlate').addEventListener('click', event => {
+                applyNewOptions({ customCSS: '.fixedFlexBox { background-color: rgba(0, 0, 50, 0.7) }',
+                                  customCSSCleanSlate: true })
             })
         })
 
         let disposeSwipeUp = () => {
+            document.querySelector('#swipe-up-styles').remove()
             document.querySelector('.swipeUpOverlay').remove()
             document.querySelector('.debugWidget').remove()
             this.swipeUp = null

@@ -26,46 +26,49 @@ defineSupportCode(function(context) {
         },
         document: {
             body: {
-                appendChild(element) { /*NOOP*/ },
+                appendChild(){},
                 children: [{style:{position:''}}],
                 style: {
                     height: '',
-                    setProperty() { /*NOOP*/ }
+                    setProperty(){}
                 }
             },
             documentElement: {
-                addEventListener(type, listener, useCapture) { /*NOOP*/ }
+                addEventListener(){}
             },
-            createElement(element) {
-                let obj = {}
-                obj.addEventListener = function () { /*NOOP*/ }
-                obj.appendChild = function () { /*NOOP*/ }
-                obj.style = {
-                    display : ''
+            createElement() {
+                return {
+                    addEventListener(){},
+                    appendChild(){},
+                    setAttribute(){},
+                    style: {
+                        display: ''
+                    }
                 }
-                return obj
             },
             querySelector() {
-                let obj = {}
-                obj.addEventListener = function () { /*NOOP*/ }
-                obj.appendChild = function () { /*NOOP*/ }
-                obj.style = {
-                    display : ''
+                return {
+                    addEventListener(){},
+                    appendChild(){},
+                    insertBefore(){},
+                    style: {
+                        display: ''
+                    },
+                    childNodes: []
                 }
-                return obj
             },
             createDocumentFragment() {
-                let obj = {}
-                obj.innerHTML = ''
-                return obj
+                return {
+                    innerHTML: ''
+                }
             }
         },
         localStorage: {
-            getItem(item) { /*NOOP*/ },
-            setItem(item, value) { /*NOOP*/ }
+            getItem(){},
+            setItem(){}
         },
-        addEventListener(type, listener, useCapture) { /*NOOP*/ },
-        dispatchEvent(event) { /*NOOP*/ },
+        addEventListener(){},
+        dispatchEvent(){},
         HTMLElement: {}.constructor,
         HTMLCollection: {}.constructor,
         NodeList: {}.constructor,

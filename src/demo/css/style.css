@@ -1,0 +1,55 @@
+BODY {
+    background: white url('../assets/raster.gif') no-repeat;
+}
+
+H3, H4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+H3 {
+    margin-top: 30px;
+}
+
+.wrapper {
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+#userAgent {
+    font-size: 12px;
+}
+
+#mailToLink {
+    float: right;
+    top: 50px;
+    right: 10px;
+    margin-left: 5px;
+}
+
+.inputForKeyboardOnDemo, .demoButton {
+    height: 45px;
+    font-size: 14px;
+    border: 1px solid maroon;
+    margin: 5px;
+}
+
+.inputForKeyboardOnDemo {
+    width: 150px;
+    border: 1px solid cadetblue;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.options {
+    border: 1px dashed gray;
+    background-color: silver;
+}
+
+.options P {
+    margin: 0;
+}
+
+.options .demoButton {
+    height: 30px;
+}

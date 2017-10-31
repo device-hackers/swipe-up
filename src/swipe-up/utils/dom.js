@@ -53,18 +53,26 @@ Wrap.prototype.toggle = function () {
     if (this.ref) this.ref.style.display === 'none' ? this.show() : this.hide()
 }
 
-/*function createStyleElement() {
-    let styleElement = document.createElement('style')
-    styleElement.setAttribute('type', 'text/css')
-    return styleElement
-}
-let container = document.querySelector('head')
-let styleElement = createStyleElement()
-styleElement.textContent = 'body {color: red; font-weight: bold;}'
-container.insertBefore(styleElement, container.childNodes[0])*/
-
 //Just basic DOM shortcuts following jQuery style
 export default function $(selector) {
     let element = selector instanceof HTMLElement ? selector : document.querySelector(selector)
     return new Wrap(element)
+}
+
+export function addRunTimeStyles(css, win = window) {
+    //Strip potential UTF-8 BOM if CSS was read from a file
+    if (css.charCodeAt(0) === 0xFEFF) css = css.substr(1, css.length)
+
+    let styleElement = win.document.createElement('style')
+    styleElement.setAttribute('id', 'swipe-up-styles')
+    styleElement.setAttribute('type', 'text/css')
+
+    if (styleElement.styleSheet) {
+        styleElement.styleSheet.cssText = css
+    } else {
+        styleElement.textContent = css;
+    }
+
+    let head = win.document.querySelector('head')
+    head.insertBefore(styleElement, head.childNodes[0])
 }

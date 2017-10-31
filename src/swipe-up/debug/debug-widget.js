@@ -1,5 +1,5 @@
 import {version, dependencies} from '../../../package.json'
-import $ from '../../utils/dom'
+import $ from '../utils/dom'
 import KeyboardButton from './buttons/keyboard-button'
 import RefreshButton from './buttons/refresh-button'
 import FullScreenButton from './buttons/fullscreen-button'
