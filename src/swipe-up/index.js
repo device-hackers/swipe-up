@@ -14,7 +14,8 @@ let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMa
 //TODO add styles overrides, + add switch to override or init styles
 const defaultOptions = {
     initialOrientation: null,
-    addImportantToBodyHeight: false, //Some Web apps use importants like: body {height:100% !important}, so this to allow them to override this to add important rule as well
+    addImportantToBodyHeight: false, //Some Web apps use importants like: body {height:100% !important},
+                                     //so this is to allow them to override above by adding important rule as well
     fixateRootElementsOnInit: false,
     scrollWindowToTopOnShow: false,//TODO this param may be incompatible if to add scroll and touchmove handlers
     useHtml5FullScreenWhenPossible: true, //fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
@@ -43,7 +44,6 @@ let fixateRootElementsIfNeeded = (self) => {
     }
 }
 
-//TODO fix Safari portrait not swiping on CP loading screen
 //TODO fix Safari sometimes not showing swipe up even though debug widget get resize event
 export default class SwipeUp {
     constructor(opts, windowObj = window) {

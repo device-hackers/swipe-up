@@ -53,6 +53,16 @@ Wrap.prototype.toggle = function () {
     if (this.ref) this.ref.style.display === 'none' ? this.show() : this.hide()
 }
 
+/*function createStyleElement() {
+    let styleElement = document.createElement('style')
+    styleElement.setAttribute('type', 'text/css')
+    return styleElement
+}
+let container = document.querySelector('head')
+let styleElement = createStyleElement()
+styleElement.textContent = 'body {color: red; font-weight: bold;}'
+container.insertBefore(styleElement, container.childNodes[0])*/
+
 //Just basic DOM shortcuts following jQuery style
 export default function $(selector) {
     let element = selector instanceof HTMLElement ? selector : document.querySelector(selector)
