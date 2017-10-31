@@ -16,7 +16,7 @@ const defaultOptions = {
     initialOrientation: null,
     addImportantToBodyHeight: false, //Some Web apps use importants like: body {height:100% !important}, so this to allow them to override this to add important rule as well
     fixateRootElementsOnInit: false,
-    scrollWindowToTopOnShow: false,
+    scrollWindowToTopOnShow: false,//TODO this param may be incompatible if to add scroll and touchmove handlers
     useHtml5FullScreenWhenPossible: true, //fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
     excludedUserAgents: null,
     useTextInsteadOfImages: false,
@@ -136,8 +136,12 @@ export default class SwipeUp {
 
             new EventThrottle('resize', 'optimizedResize', win)
             new EventThrottle('orientationchange', 'optimizedOrientationchange', win)
+            //new EventThrottle('scroll', 'optimizedScroll', win)
+            //new EventThrottle('touchmove', 'optimizedTouchmove', win)
             win.addEventListener('optimizedResize', resizeHandler)
             win.addEventListener('optimizedOrientationchange', resizeHandler)
+            //win.addEventListener('optimizedScroll', resizeHandler)
+            //win.addEventListener('optimizedTouchmove', resizeHandler)
         }
     }
 

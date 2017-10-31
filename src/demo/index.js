@@ -4,7 +4,7 @@ import SwipeUp from '../swipe-up/index'
 class SwipeUpDemo {
     constructor() {
         window.addEventListener('load', () => {
-            this.swipeUp = new SwipeUp(null, window)
+            this.swipeUp = new SwipeUp({useHtml5FullScreenWhenPossible: false}, window)
             this.swipeUp.enable()
             //this.swipeUp.showDebugWidget() //its probably good idea to start without widget visible
             this.renderUi()
