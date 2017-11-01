@@ -7,8 +7,9 @@ import SwipeUpCss from './css/swipe-up.css'
 import DebugWidgetCss from './css/debug-widget.css'
 
 //Private scope
-const localStorageDisableKey = 'SwipeUp._disabled'
-const expandBodyHeightTo = '110vh'
+const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up
+const expandBodyHeightTo = '110vh' //Required at least for Safari, otherwise URL bar will appear right after swiping up
+const updateTimeout = 100 //Required at least for Safari, otherwise resize after keyboard hiding will have stale dimensions
 
 //win is a shortcut for window
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
@@ -159,9 +160,11 @@ export default class SwipeUp {
             let debugWidgetTrigger = new DebugWidgetTrigger(this, swipeUpOverlay, win)
             debugWidgetTrigger.shouldShowWidgetOnLoad ? this.showDebugWidget() : null
 
-            const resizeHandler = (event) => {
-                showOrHide(this)
-                _debugWidget.get(this) ? _debugWidget.get(this).update() : null
+            const resizeHandler = () => {
+                setTimeout(() => {
+                    showOrHide(this)
+                    _debugWidget.get(this) ? _debugWidget.get(this).update() : null
+                }, updateTimeout)
             }
 
             new EventThrottle('resize', 'optimizedResize', win)
