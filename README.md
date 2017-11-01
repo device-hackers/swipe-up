@@ -1,6 +1,7 @@
 # Swipe Up
 [![npm version](https://badge.fury.io/js/swipe-up.svg)](https://badge.fury.io/js/swipe-up) 
-![single dependency](https://david-dm.org/TheBit/swipe-up.svg) 
+![dependencies](https://david-dm.org/TheBit/swipe-up.svg) 
+![dependencies](https://david-dm.org/device-hackers/swipe-up.svg) 
 [![build](https://travis-ci.org/device-hackers/swipe-up.svg?branch=master)](https://travis-ci.org/device-hackers/swipe-up)
 [![gzipped size](http://img.badgesize.io/https://unpkg.com/swipe-up?compression=gzip)](https://unpkg.com/swipe-up)
 
@@ -74,7 +75,7 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 
 ## Dependencies
 - [Browser UI State](https://github.com/device-hackers/browser-ui-state)
-- [Detect Passive Events](https://github.com/rafrex/detect-passive-events)
+- [Detect Passive Events](https://github.com/rafrex/detect-passive-events) for [Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md)
 - [Fscreen](https://github.com/rafrex/fscreen)
 
 ## Matrix of supported devices and browsers
