@@ -4,9 +4,7 @@ import DebugWidgetTrigger from './debug/debug-widget-trigger'
 import EventThrottle from './utils/event-throttle'
 import $, {addRunTimeStyles} from './utils/dom'
 import SwipeUpCss from './css/swipe-up.css'
-import AnimationsCss from './css/animations.css'
 import DebugWidgetCss from './css/debug-widget.css'
-import {swipeUpHand, touchHand} from './animations'
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled'
@@ -15,23 +13,75 @@ const expandBodyHeightTo = '110vh'
 //win is a shortcut for window
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
 
+/**
+ * Set of default options which meant to be overridden by options provided to SwipeUp constructor
+ */
 const defaultOptions = {
-    initialOrientation: null, //Some user-agents (QQ both EN & CN, UC EN before 11.4.6) doesn't support screen.orientation API,
-                              //but their initial orientation can be determined at web page parse/execute time by comparing
-                              //window.innerWidth and height. And if it will be supplied to Swipe Up / Browser UI State -
-                              //they will do a better job in determining orientation and state, especially in context of
-                              //on-screen keyboard and split-screen mode
-    addImportantToBodyHeight: false, //Some Web apps use importants like: body {height:100% !important},
-                                     //so this is to allow them to override above by adding important rule as well
-    fixateRootElementsOnInit: false, //To apply position:fixed for all Body's direct children, so that body doesn't move
-    scrollWindowToTopOnShow: false, //TODO this param may be incompatible if to add scroll and touchmove handlers
-    useHtml5FullScreenWhenPossible: true, //fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
-    excludedUserAgents: null, //Ability to black-list user agents via RegExp on which Swipe Up will not work (e.g. Tablets)
-    useTextInsteadOfImages: false, //To display below texts instead of animations
-    swipeUpText: 'Swipe up to continue in full-screen mode',
-    html5FullScreenText: 'Touch to continue in full-screen mode',
-    customCSS: '', //Ability to brand/customize Swipe Up at run-time
-    customCSSCleanSlate: false, //customCSS is applied standalone instead of adding to/after SwipeUpCss and AnimationsCss
+    /**
+     * Some user-agents (QQ both EN & CN, UC EN before 11.4.6) doesn't support screen.orientation API, but their
+     * initial orientation can be determined at web page parse/execute time by comparing window.innerWidth and height.
+     * And if it will be supplied to Swipe Up / Browser UI State - they will do a better job in determining
+     * orientation and state, especially in context of on-screen keyboard and split-screen mode
+     * @type {string}
+     * @default null
+     */
+    initialOrientation: null,
+
+    /**
+     * Some Web apps use importants like: body {height:100% !important}, so this is to allow them to override above
+     * by adding important rule as well
+     * @type {boolean}
+     * @default false
+     */
+    addImportantToBodyHeight: false,
+
+    /**
+     * To apply position:fixed for all body's direct children, so that body doesn't move
+     * @type {boolean}
+     * @default false
+     */
+    fixateRootElementsOnInit: false,
+
+    /**
+     * If set to true will make window scroll to top whenever Swipe Up is triggering its showing
+     * TODO this param may be incompatible if to add scroll and touchmove handlers to Swipe Up
+     * @type {boolean}
+     * @default false
+     */
+    scrollWindowToTopOnShow: false,
+
+    /**
+     * If set to true will try to switch from regular 'swipe up to continue' to HTML5 FullScreen 'touch to continue' if
+     * user-agent supports it.
+     * fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
+     * @type {boolean}
+     * @default true
+     */
+    useHtml5FullScreenWhenPossible: true,
+
+    /**
+     * Ability to black-list user agents via RegExp on which Swipe Up will not work (e.g. Tablets)
+     * @type {RegExp}
+     * @default null
+     */
+    excludedUserAgents: null,
+
+    /**
+     * Ability to brand/customize Swipe Up at run-time with CSS stored in the string
+     * @type {string}
+     * @default ''
+     */
+    customCSS: '',
+
+    /**
+     * customCSS is applied standalone instead of adding to/after SwipeUpCss
+     * @type {boolean}
+     * @default false
+     */
+    customCSSCleanSlate: false,
+
+    swipeUpContent: 'Swipe up to continue in full-screen mode',
+    html5FullScreenContent: 'Touch to continue in full-screen mode',
 }
 
 let showOrHide = (self) => {
@@ -73,7 +123,7 @@ export default class SwipeUp {
         if (!this.isUserAgentExcluded) {
             let customCSS = options.customCSS
             let customCSSCleanSlate = options.customCSSCleanSlate
-            let cssToApply = customCSSCleanSlate ? customCSS : SwipeUpCss + AnimationsCss + customCSS
+            let cssToApply = customCSSCleanSlate ? customCSS : SwipeUpCss + customCSS
 
             addRunTimeStyles(cssToApply + DebugWidgetCss, win)
 
@@ -87,22 +137,15 @@ export default class SwipeUp {
                     win.document.body.style.setProperty('height', expandBodyHeightTo)
             }
 
-            let useTextInsteadOfImages = options.useTextInsteadOfImages
-            let html5FullScreenText = options.html5FullScreenText
-            let swipeUpText = options.swipeUpText
+            let html5FullScreenContent = options.html5FullScreenContent
+            let swipeUpContent = options.swipeUpContent
 
             _swipeUpOverlay.set(this, win.document.createElement('div'))
             let swipeUpOverlay = _swipeUpOverlay.get(this)
             swipeUpOverlay.className = 'swipeUpOverlay'
             swipeUpOverlay.innerHTML =
                 `<div class='fixedFlexBox'>
-                    <div class='content'>
-                        ${(useHtml5FullScreen ?
-                            (useTextInsteadOfImages ? html5FullScreenText : touchHand)
-                            :
-                            (useTextInsteadOfImages ? swipeUpText : swipeUpHand)
-                        )}
-                    </div>
+                    <div class='content'>${(useHtml5FullScreen ? html5FullScreenContent : swipeUpContent)}</div>
                 </div>`
             win.document.body.appendChild(swipeUpOverlay)
 
