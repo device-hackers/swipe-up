@@ -73,8 +73,9 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 (hold finger in the bottom left corner on Swipe Up and quickly tripple-tap in the top right corner)
 
 ## Dependencies
-- [Fscreen](https://github.com/rafrex/fscreen)
 - [Browser UI State](https://github.com/device-hackers/browser-ui-state)
+- [Detect Passive Events](https://github.com/rafrex/detect-passive-events)
+- [Fscreen](https://github.com/rafrex/fscreen)
 
 ## Matrix of supported devices and browsers
 See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State
