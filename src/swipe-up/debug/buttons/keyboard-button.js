@@ -5,6 +5,12 @@ export default class KeyboardButton extends ControlButton {
     constructor(debugWidget) {
         let selfName = 'keyboard'
 
+        let createSelfRemoveContainer = () => {
+            let div = document.createElement('div')
+            div.setAttribute('class', 'selfRemoveContainer')
+            return div
+        }
+
         let createInput = () => {
             let input = document.createElement('input')
             input.setAttribute('class', 'inputForKeyboard')
@@ -18,25 +24,17 @@ export default class KeyboardButton extends ControlButton {
             button.innerHTML = 'X'
             button.style.width = '1.5em'
             button.style.flex = 'initial'
-            button.addEventListener('click', () => {
-                $('.inputForKeyboard').get().remove()
-                $('.selfRemove').get().remove()
-            })
+            button.addEventListener('click', () => $('.selfRemoveContainer').get().remove())
             return button
         }
-
-        //$('.debugButtons').append(createInput())
 
         super(selfName)
 
         super.click( () => {
-            let debugButtons = $('.debugButtons').get()
-            let keyboard = $('.keyboard-button').get()
-            let selfRemove = $('.selfRemove').get()
-
-            if (!selfRemove) {
-                debugButtons.insertBefore(createInput(), keyboard)
-                debugButtons.insertBefore(createSelfRemoveButton(), keyboard)
+            if (!$('.selfRemoveContainer').get()) {
+                $('.debugButtons').get().insertBefore(createSelfRemoveContainer(), $('.keyboard-button').get())
+                $('.selfRemoveContainer').get().appendChild(createInput())
+                $('.selfRemoveContainer').get().appendChild(createSelfRemoveButton())
                 $('.inputForKeyboard').style.width = '20px'
             }
 
