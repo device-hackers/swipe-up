@@ -96,9 +96,14 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 (hold finger in the bottom left corner on Swipe Up and quickly tripple-tap in the top right corner)
 
 ## Dependencies
-- [Browser UI State](https://github.com/device-hackers/browser-ui-state)
-- [Detect Passive Events](https://github.com/rafrex/detect-passive-events) for [Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md)
-- [Fscreen](https://github.com/rafrex/fscreen)
+- [Browser UI State](https://github.com/device-hackers/browser-ui-state) - 
+[![gzipped size](http://img.badgesize.io/https://unpkg.com/browser-ui-state?compression=gzip)](https://unpkg.com/browser-ui-state) 
+(used as a chassis), so own code size of Swipe Up is also about ~5 Kb (gzipped)
+- [Detect Passive Events](https://github.com/rafrex/detect-passive-events) - ~20 lines of 
+[code](https://github.com/rafrex/detect-passive-events/blob/master/src/index.js) (used for correct cross-browser usage of 
+[Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md))
+- [Fscreen](https://github.com/rafrex/fscreen) - ~60 lines of [code](https://github.com/rafrex/fscreen/blob/master/src/index.js)
+(used for vendor agnostic access to the [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API))
 
 ## Matrix of supported devices and browsers
 See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State
