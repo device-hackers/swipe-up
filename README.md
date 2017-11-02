@@ -65,6 +65,8 @@ let options = {
     excludedUserAgents: /\WiPad\W/i,
     customCSS: '.fixedFlexBox { background-color: rgba(0, 0, 50, 0.7) }',
     customCSSCleanSlate: true,
+    expandBodyHeightTo: '120vh',
+    updateTimeout: 150,
     swipeUpContent: 'Swipe Up to continue <b>custom text</b>',
     html5FullScreenContent: 'Touch to continue <b>custom text</b>',
 }
@@ -106,7 +108,13 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 (used for vendor agnostic access to the [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API))
 
 ## Matrix of supported devices and browsers
-See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State
+See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State.
 
 ## Engine explanation
-See [Engine](https://github.com/device-hackers/browser-ui-state/blob/master/docs/ENGINE.md) from Browser UI State
+See [Engine](https://github.com/device-hackers/browser-ui-state/blob/master/docs/ENGINE.md) from Browser UI State.
+
+Also Swipe Up respects user-agent resources and throttles window 
+[resize](https://developer.mozilla.org/en-US/docs/Web/Events/resize) and device 
+[orientationchange](https://developer.mozilla.org/en-US/docs/Web/Events/orientationchange) events with the help of
+[requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
+Also Swipe Up has to delay its calculations on those events to 

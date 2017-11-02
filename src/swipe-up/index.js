@@ -8,21 +8,19 @@ import DebugWidgetCss from './css/debug-widget.css'
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up
-const expandBodyHeightTo = '110vh' //Required at least for Safari, otherwise URL bar will appear right after swiping up
-const updateTimeout = 100 //Required at least for Safari, otherwise resize after keyboard hiding will have stale dimensions
 
 //win is a shortcut for window
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
 
 /**
- * Set of default options which meant to be overridden by options provided to SwipeUp constructor
+ * Set of default options which meant to be overridden by options provided to SwipeUp constructor.
  */
 const defaultOptions = {
     /**
      * Some user-agents (QQ both EN & CN, UC EN before 11.4.6) doesn't support screen.orientation API, but their
      * initial orientation can be determined at web page parse/execute time by comparing window.innerWidth and height.
      * And if it will be supplied to Swipe Up / Browser UI State - they will do a better job in determining
-     * orientation and state, especially in context of on-screen keyboard and split-screen mode
+     * orientation and state, especially in context of on-screen keyboard and split-screen mode.
      * @type {string}
      * @default null
      */
@@ -30,21 +28,21 @@ const defaultOptions = {
 
     /**
      * Some Web apps use importants like: body {height:100% !important}, so this is to allow them to override above
-     * by adding important rule as well
+     * by adding important rule as well.
      * @type {boolean}
      * @default false
      */
     addImportantToBodyHeight: false,
 
     /**
-     * To apply position:fixed for all body's direct children, so that body doesn't move
+     * To apply position:fixed for all body's direct children, so that body doesn't move.
      * @type {boolean}
      * @default false
      */
     fixateRootElementsOnInit: false,
 
     /**
-     * If set to true will make window scroll to top whenever Swipe Up is triggering its showing
+     * If set to true will make window scroll to top whenever Swipe Up is triggering its showing.
      * TODO this param may be incompatible if to add scroll and touchmove handlers to Swipe Up
      * @type {boolean}
      * @default false
@@ -54,32 +52,48 @@ const defaultOptions = {
     /**
      * If set to true will try to switch from regular 'swipe up to continue' to HTML5 FullScreen 'touch to continue' if
      * user-agent supports it.
-     * fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API
+     * fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API.
      * @type {boolean}
      * @default true
      */
     useHtml5FullScreenWhenPossible: true,
 
     /**
-     * Ability to black-list user agents via RegExp on which Swipe Up will not work (e.g. Tablets)
+     * Ability to black-list user agents via RegExp on which Swipe Up will not work (e.g. Tablets).
      * @type {RegExp}
      * @default null
      */
     excludedUserAgents: null,
 
     /**
-     * Ability to brand/customize Swipe Up at run-time with CSS stored in the string
+     * Ability to brand/customize Swipe Up at run-time with CSS stored in the string.
      * @type {string}
      * @default ''
      */
     customCSS: '',
 
     /**
-     * customCSS is applied standalone instead of adding to/after SwipeUpCss
+     * customCSS is applied standalone instead of adding to/after SwipeUpCss.
      * @type {boolean}
      * @default false
      */
     customCSSCleanSlate: false,
+
+    /**
+     * Must have trick for SPAs with no scrollable content to make body height bigger to force correct URL bar hiding.
+     * Required at least for Safari, otherwise URL bar will appear back again right after swiping up.
+     * @type {string}
+     * @default '100vh'
+     */
+    expandBodyHeightTo: '110vh',
+
+    /**
+     * Milliseconds delay after resize/orientationchange to make decision to show or hide Swipe Up.
+     * Required at least for Safari, otherwise resize after keyboard hiding will have stale dimensions of window.
+     * @type {number}
+     * @default 100
+     */
+    updateTimeout: 100,
 
     swipeUpContent: 'Swipe up to continue in full-screen mode',
     html5FullScreenContent: 'Touch to continue in full-screen mode',
@@ -134,8 +148,8 @@ export default class SwipeUp {
 
                 //Required for Safari portrait
                 options.addImportantToBodyHeight ?
-                    win.document.body.style.setProperty('height', expandBodyHeightTo, 'important') :
-                    win.document.body.style.setProperty('height', expandBodyHeightTo)
+                    win.document.body.style.setProperty('height', options.expandBodyHeightTo, 'important') :
+                    win.document.body.style.setProperty('height', options.expandBodyHeightTo)
             }
 
             let html5FullScreenContent = options.html5FullScreenContent
@@ -164,7 +178,7 @@ export default class SwipeUp {
                 setTimeout(() => {
                     showOrHide(this)
                     _debugWidget.get(this) ? _debugWidget.get(this).update() : null
-                }, updateTimeout)
+                }, options.updateTimeout)
             }
 
             new EventThrottle('resize', 'optimizedResize', win)

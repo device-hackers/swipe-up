@@ -41,6 +41,21 @@ class SwipeUpDemo {
                 applyNewOptions({ customCSS: '.fixedFlexBox { background-color: rgba(0, 0, 50, 0.7) }',
                                   customCSSCleanSlate: true })
             })
+            document.querySelector('#expandBodyHeightTo1').addEventListener('click', event => {
+                applyNewOptions({ expandBodyHeightTo: '120vh' })
+            })
+            document.querySelector('#expandBodyHeightTo2').addEventListener('click', event => {
+                applyNewOptions({ expandBodyHeightTo: '100%' })
+            })
+            document.querySelector('#expandBodyHeightTo3').addEventListener('click', event => {
+                applyNewOptions({ expandBodyHeightTo: 'initial' })
+            })
+            document.querySelector('#updateTimeout1').addEventListener('click', event => {
+                applyNewOptions({ updateTimeout: 0 })
+            })
+            document.querySelector('#updateTimeout2').addEventListener('click', event => {
+                applyNewOptions({ updateTimeout: 200 })
+            })
             document.querySelector('#animated').addEventListener('click', event => {
                 applyNewOptions({
                     swipeUpContent:
