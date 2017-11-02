@@ -113,8 +113,42 @@ See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs
 ## Engine explanation
 See [Engine](https://github.com/device-hackers/browser-ui-state/blob/master/docs/ENGINE.md) from Browser UI State.
 
-Also Swipe Up respects user-agent resources and throttles window 
+- Swipe Up respects user-agent resources and throttles window 
 [resize](https://developer.mozilla.org/en-US/docs/Web/Events/resize) and device 
 [orientationchange](https://developer.mozilla.org/en-US/docs/Web/Events/orientationchange) events with the help of
 [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
-Also Swipe Up has to delay its calculations on those events to 
+
+- Swipe Up has to delay its calculations on above events to circumvent some silly browsers (at least Safari) 
+which seems to fire resize in some cases slightly before the browser actually calculated final window
+dimensions (window.innerWidth and height) resulting into window size to be reported somewhat intermediate,
+and if user to press some kind of 'refresh' button (which will redisplay window size) after it - the window size 
+will display updated to final values, meaning we are forced to use delay. Even above technique with 
+requestAnimationFrame doesn't help to workaround this problem. All aspects of Swipe Up behavior are configurable
+including mentioned delay (updateTimeout).
+
+- Swipe Up applies its CSS styles by dynamically creating ```<style>``` tag (with ID ```swipe-up-styles``` 
+just in case) and inserting it as first child into ```<head>``` so you can easily customize it using either 
+traditional approach (with your own ```<style>```s which should go below Swipe Up ```<style>```) or via 
+options customCSS and customCSSCleanSlate which will result into your CSS injected into the same Swipe Up's 
+own ```<style>``` tag after Swipe Up's own styles.
+
+- By default Swipe Up will try to use HTML5 
+[Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API) if user-agent will be support it,
+falling back to classic "swipe up" functionality otherwise. If for some reason above API is not fitting your needs,
+it can be turned-off with ```useHtml5FullScreenWhenPossible``` option
+
+- If you need to support QQ EN, QQ CN, UC EN before 11.4.6 and/or other browsers not capable of 
+[screen.orientation API](https://developer.mozilla.org/en-US/docs/Web/API/Screen/orientation) - you may supply Swipe Up
+with ```initialOrientation``` (which you can detect with window.innerWidth > window.innerHeight check). This will allow
+Swipe Up to detect states and orientation more correctly in edge cases like on-screen keyboard and split screens.
+
+- If you have business requirement to not show Swipe Up for example on all tablets - you will have to take care of this
+requirement yourself because there is not reliable cross-browser way to detect if device is a tablet. Swipe Up could
+help with this, but that would mean it should become dependent on ```Detect.js``` (To be hosted on Github soon) resulting
+into bigger bundle size. Use ```excludedUserAgents``` option and supply regular expression which will list iPad and all
+Android tablets which your business care of, e.g. 
+```excludedUserAgents : /(?:\WiPad\W|\WTablet\W|\WNexus (?:7|9|10)\W)|(\WSM-T80\W)/i``` which will disable Swipe Up on
+iPads, Firefox on any tablet, all Nexus tablets (7, 9, 10), and Samsung Galaxy Tab S 10.5.
+If you already use ```Detect.js``` things may become lots simpler, as you can supply function instead of RegExp.
+This function has to return true or false for current user-agent, and as so both libs can be combined like this:
+```excludedUserAgents : () => Detect.Type.is(Detect.T.Tablet)```

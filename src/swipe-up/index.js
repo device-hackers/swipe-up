@@ -59,8 +59,9 @@ const defaultOptions = {
     useHtml5FullScreenWhenPossible: true,
 
     /**
-     * Ability to black-list user agents via RegExp on which Swipe Up will not work (e.g. Tablets).
-     * @type {RegExp}
+     * Ability to black-list user agents via RegExp or Function which should return true or false
+     * on which Swipe Up will not work (e.g. Tablets).
+     * @type {RegExp} or {Function}
      * @default null
      */
     excludedUserAgents: null,
@@ -197,9 +198,11 @@ export default class SwipeUp {
     }
 
     get isUserAgentExcluded() {
-        return _options.get(this).excludedUserAgents &&
-               _options.get(this).excludedUserAgents instanceof RegExp &&
-               _options.get(this).excludedUserAgents.test(_win.get(this).navigator.userAgent)
+        let userAgent = _win.get(this).navigator.userAgent
+        let excludedUserAgents = _options.get(this).excludedUserAgents
+        return (excludedUserAgents instanceof RegExp && excludedUserAgents.test(userAgent))
+                ||
+               (excludedUserAgents instanceof Function && excludedUserAgents())
     }
 
     disable() {
