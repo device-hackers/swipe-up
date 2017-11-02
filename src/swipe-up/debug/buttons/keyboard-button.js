@@ -19,28 +19,28 @@ export default class KeyboardButton extends ControlButton {
             button.style.width = '1.5em'
             button.style.flex = 'initial'
             button.addEventListener('click', () => {
+                $('.inputForKeyboard').get().remove()
                 $('.selfRemove').get().remove()
-                $('.inputForKeyboard').style.width = '1px'
             })
             return button
         }
 
-        $('.debugButtons').append(createInput())
+        //$('.debugButtons').append(createInput())
 
         super(selfName)
 
         super.click( () => {
             let debugButtons = $('.debugButtons').get()
-            let inputForKeyboard = $('.inputForKeyboard').get()
             let keyboard = $('.keyboard-button').get()
             let selfRemove = $('.selfRemove').get()
 
             if (!selfRemove) {
+                debugButtons.insertBefore(createInput(), keyboard)
                 debugButtons.insertBefore(createSelfRemoveButton(), keyboard)
                 $('.inputForKeyboard').style.width = '20px'
             }
 
-            inputForKeyboard.focus()
+            $('.inputForKeyboard').focus()
         } )
     }
 }
