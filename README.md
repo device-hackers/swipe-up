@@ -1,6 +1,5 @@
 # Swipe Up
 [![npm version](https://badge.fury.io/js/swipe-up.svg)](https://badge.fury.io/js/swipe-up) 
-![dependencies](https://david-dm.org/TheBit/swipe-up.svg) 
 ![dependencies](https://david-dm.org/device-hackers/swipe-up.svg) 
 [![build](https://travis-ci.org/device-hackers/swipe-up.svg?branch=master)](https://travis-ci.org/device-hackers/swipe-up)
 [![gzipped size](http://img.badgesize.io/https://unpkg.com/swipe-up?compression=gzip)](https://unpkg.com/swipe-up)
@@ -82,12 +81,12 @@ swipeUp.browserUiState       //Access to BrowserUiState instance
 swipeUp.fscreen              //Access to fscreen instance
 swipeUp.isShown              //Boolean - SwipeUp visibility status 
 swipeUp.isUserAgentExcluded  //Boolean - Results of match for options.excludedUserAgents 
-swipeUp.disable()            //This and next one allows to control operational mode of SwipeUp,
-swipeUp.enable()             //so you have ability to "turn-on" and "off" SwipeUp functioning according to your needs
+swipeUp.disable()            //This and next one allows to control operational mode of SwipeUp, so you have
+swipeUp.enable()             //ability to "turn-on" and "off" SwipeUp functioning according to your needs
 swipeUp.showDebugWidget()    //As it sounds - you can trigger debug widget appearing via API,
 swipeUp.hideDebugWidget()    //but it can be also displayed via case insensitive URL param "debugInSwipeUp",
-swipeUp.toggleDebugWidget()  //as well as via secret touch sequence (hold finger in the bottom right corner on Swipe Up
-                             //and quickly tripple-tap in the top left corner)
+swipeUp.toggleDebugWidget()  //as well as via secret touch sequence (hold finger in the bottom right corner
+                             //on Swipe Up and quickly tripple-tap in the top left corner)
 ```
 *there is another secret touch sequence which can be communicated to users to workaround possible blocking experience
 where Swipe Up may prevent product usage due to not yet supported browser or new mobile limitation/issue 
