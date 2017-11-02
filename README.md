@@ -79,10 +79,13 @@ see code for "animated" button from demo for example how UI can be customized dr
 ```javascript
 swipeUp.browserUiState     //Access to BrowserUiState instance
 swipeUp.fscreen            //Access to fscreen instance
+
 swipeUp.isShown            //Boolean - SwipeUp visibility status 
 swipeUp.isUserAgentExcluded//Boolean - Results of match for options.excludedUserAgents 
+
 swipeUp.disable()          //This and next one allows to control operational mode of SwipeUp, so you have
 swipeUp.enable()           //ability to "turn-on" and "off" SwipeUp functioning according to your needs
+
 swipeUp.showDebugWidget()  //As it sounds - you can trigger debug widget appearing via API,
 swipeUp.hideDebugWidget()  //but it can be also displayed via case insensitive URL param "debugInSwipeUp",
 swipeUp.toggleDebugWidget()//as well as via secret touch sequence (hold finger in the bottom right corner
