@@ -34,6 +34,26 @@ const loadHandler = () => {
   
 window.addEventListener('load', loadHandler)
 ```
+Old school:
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" 
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+    <script type="text/javascript" src="https://unpkg.com/swipe-up@1.0.0/dist/swipe-up.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            var swipeUp = new SwipeUp()
+            swipeUp.enable()
+        })
+    </script>
+</head>
+<body>
+</body>
+</html>
+```
 
 ## Constructor Options
 ```javascript
