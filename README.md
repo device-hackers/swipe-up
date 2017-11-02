@@ -41,7 +41,7 @@ Old school:
     <meta name="viewport" 
         content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 
-    <script type="text/javascript" src="https://unpkg.com/swipe-up@1.0.0/dist/swipe-up.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/swipe-up"></script>
     <script>
         window.addEventListener('load', function () {
             var swipeUp = new SwipeUp()
