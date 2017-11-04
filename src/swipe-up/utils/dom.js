@@ -59,6 +59,49 @@ export default function $(selector) {
     return new Wrap(element)
 }
 
+//-------------------------------------------------------------------------------------------------
+
+export const isUrlTriggerParamPresent = (name, win) =>
+                 new RegExp(`[?&]${name}(?:$|=|&)`, 'i').test(win.location.search)
+
+export const getUrlParamValue = (name, win) => {
+    let result = new RegExp(`${name}=(.*?)(?:$|#|&)`, 'i').exec(win.location.search)
+    return result ? decodeURI(result[1]) : result
+}
+
+export const overrideString = (option, optionName, win) => {
+    let value = getUrlParamValue(optionName, win)
+    value ? option[optionName] = value : null
+}
+
+export const overrideBoolean = (option, optionName, win) => {
+    let value = getUrlParamValue(optionName, win)
+    if (value && (value === 'true' || value === 'false')) {
+        option[optionName] = value === 'true'
+    }
+}
+
+export const overrideNumber = (option, optionName, win) => {
+    let value = getUrlParamValue(optionName, win)
+    value ? option[optionName] = parseInt(value) : null
+}
+
+export const overrideRegExp = (option, optionName, win) => {
+    let value = getUrlParamValue(optionName, win)
+    value ? option[optionName] = new RegExp(value, 'i') : null
+}
+
+/**
+ * @returns {boolean} true if script running inside iFrame (no matter in which level), false otherwise
+ */
+export const inIframe = () => {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+}
+
 export function addRunTimeStyles(css, win = window) {
     //Strip potential UTF-8 BOM if CSS was read from a file
     if (css.charCodeAt(0) === 0xFEFF) css = css.substr(1, css.length)

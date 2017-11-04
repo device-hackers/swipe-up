@@ -30,8 +30,17 @@ export default `
     margin-right: 10px;
 }
 
-.debugUserAgent {
+.debugUserAgent, .debugSwipeUpOptions {
     font-size: 0.9em;
+}
+
+.debugSwipeUpOptions i {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 4em;
+    vertical-align: bottom;
 }
 
 .debugButtons {

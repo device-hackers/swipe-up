@@ -22,6 +22,7 @@ export default class DebugWidget {
         $(this._debugWidgetContainer).append(
             '<div class="debugAllReadings"></div>'+
             '<div class="debugUserAgent"></div>' +
+            '<div class="debugSwipeUpOptions"></div>' +
             '<div class="debugButtons"></div>')
         this._win.document.body.appendChild(this._debugWidgetContainer)
 
@@ -44,6 +45,7 @@ export default class DebugWidget {
 
         $('.debugAllReadings').html(this.recordAllReadings)
         $('.debugUserAgent').html(this.recordUserAgent)
+        $('.debugSwipeUpOptions').html(this.recordSwipeUpOptions)
     }
 
     get recordAllReadings() {
@@ -109,6 +111,14 @@ export default class DebugWidget {
             this._browserUiState._provider._device.toLowerCase() : '...'
 
         return `${userAgentName} : ${deviceName} : ${userAgent}`
+    }
+
+    get recordSwipeUpOptions() {
+        let opts = this._swipeUp.appliedOptions
+        return `${opts.initialOrientation} : ${opts.addImportantToBodyHeight} : ${opts.fixateRootElementsOnInit} : ` +
+            `${opts.scrollWindowToTopOnShow} : ${opts.useHtml5FullScreenWhenPossible} : ${opts.excludedUserAgents} : ` +
+            `<i>${opts.customCSS}</i> : ${opts.customCSSCleanSlate} : ${opts.expandBodyHeightTo} : ` +
+            `${opts.updateTimeout} : <i>${opts.swipeUpContent}</i> : <i>${opts.html5FullScreenContent}</i>`
     }
 
     show() {

@@ -2,105 +2,26 @@ import BrowserUiState from 'browser-ui-state'
 import DebugWidget from './debug/debug-widget'
 import DebugWidgetTrigger from './debug/debug-widget-trigger'
 import EventThrottle from './utils/event-throttle'
-import $, {addRunTimeStyles} from './utils/dom'
 import SwipeUpCss from './css/swipe-up.css'
 import DebugWidgetCss from './css/debug-widget.css'
+import $, {
+    addRunTimeStyles, inIframe, isUrlTriggerParamPresent, overrideBoolean, overrideNumber, overrideString
+} from './utils/dom'
+import defaultOptions, {overrideOptions} from './options'
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up
+const swipeUpOff = 'swipeUpOff' //To disable Swipe Up via URL
 
 //win is a shortcut for window
 let _win = new WeakMap(), _options = new WeakMap(), _swipeUpOverlay = new WeakMap(), _debugWidget = new WeakMap()
 
 /**
- * Set of default options which meant to be overridden by options provided to SwipeUp constructor.
+ * Swipe Up "core" method. Uses Browser UI State to determine at given moment if swipe up overlay
+ * should be shown to the user. Displays overlay only when state is "COLLAPSED", hides otherwise.
+ * @param self - reference to this
  */
-const defaultOptions = {
-    /**
-     * Some user-agents (QQ both EN & CN, UC EN before 11.4.6) doesn't support screen.orientation API, but their
-     * initial orientation can be determined at web page parse/execute time by comparing window.innerWidth and height.
-     * And if it will be supplied to Swipe Up / Browser UI State - they will do a better job in determining
-     * orientation and state, especially in context of on-screen keyboard and split-screen mode.
-     * @type {string}
-     * @default null
-     */
-    initialOrientation: null,
-
-    /**
-     * Some Web apps use importants like: body {height:100% !important}, so this is to allow them to override above
-     * by adding important rule as well.
-     * @type {boolean}
-     * @default false
-     */
-    addImportantToBodyHeight: false,
-
-    /**
-     * To apply position:fixed for all body's direct children, so that body doesn't move.
-     * @type {boolean}
-     * @default false
-     */
-    fixateRootElementsOnInit: false,
-
-    /**
-     * If set to true will make window scroll to top whenever Swipe Up is triggering its showing.
-     * TODO this param may be incompatible if to add scroll and touchmove handlers to Swipe Up
-     * @type {boolean}
-     * @default false
-     */
-    scrollWindowToTopOnShow: false,
-
-    /**
-     * If set to true will try to switch from regular 'swipe up to continue' to HTML5 FullScreen 'touch to continue' if
-     * user-agent supports it.
-     * fixateRootElementsOnInit has no sense for user-agents capable of HTML5 Fullscreen API.
-     * @type {boolean}
-     * @default true
-     */
-    useHtml5FullScreenWhenPossible: true,
-
-    /**
-     * Ability to black-list user agents via RegExp or Function which should return true or false
-     * on which Swipe Up will not work (e.g. Tablets).
-     * @type {RegExp} or {Function}
-     * @default null
-     */
-    excludedUserAgents: null,
-
-    /**
-     * Ability to brand/customize Swipe Up at run-time with CSS stored in the string.
-     * @type {string}
-     * @default ''
-     */
-    customCSS: '',
-
-    /**
-     * customCSS is applied standalone instead of adding to/after SwipeUpCss.
-     * @type {boolean}
-     * @default false
-     */
-    customCSSCleanSlate: false,
-
-    /**
-     * Must have trick for SPAs with no scrollable content to make body height bigger to force correct URL bar hiding.
-     * Required at least for Safari, otherwise URL bar will appear back again right after swiping up.
-     * @type {string}
-     * @default '100vh'
-     */
-    expandBodyHeightTo: '110vh',
-
-    /**
-     * Milliseconds delay after resize/orientationchange to make decision to show or hide Swipe Up.
-     * Required at least for Safari, otherwise resize after keyboard hiding will have stale dimensions of window.
-     * @type {number}
-     * @default 100
-     */
-    updateTimeout: 100,
-
-    swipeUpContent: 'Swipe up to continue in full-screen mode',
-    html5FullScreenContent: 'Touch to continue in full-screen mode',
-}
-
-let showOrHide = (self) => {
+const showOrHide = (self) => {
     let disabledInDebugging = (_win.get(self).localStorage.getItem(localStorageDisableKey) === 'true')
     let win = _win.get(self), options = _options.get(self), swipeUpOverlay = _swipeUpOverlay.get(self)
 
@@ -112,22 +33,44 @@ let showOrHide = (self) => {
     }
 }
 
-//TODO findout when and why CP got position:absolute override for #app
-let fixateRootElementsIfNeeded = (self) => {
+/**
+ * Needed as a requirement for some SPAs like full-screen games, where scrolling of the whole game
+ * together with swipe up overlay would be unacceptable (in default case when swipe up overlay is
+ * half-transparent and so the web app is visible to the user)
+ * @param self - reference to this
+ */
+const fixateRootElementsIfNeeded = (self) => {
     if (_options.get(self).fixateRootElementsOnInit) {
-        Array.from(_win.get(self).document.body.children).forEach((el) => el.style.position = 'fixed')
+        let rootElements = _win.get(self).document.body.children
+        Array.from(rootElements).forEach((element) => element.style.position = 'fixed')
     }
 }
 
-//TODO fix Safari sometimes not showing swipe up even though debug widget get resize event
+/**
+ * Method used by Swipe Up to determine if it should be launched
+ * @param self - reference to this
+ * @returns {boolean} true if either user-agent excluded or swipeUpOff in URL or
+ * Swipe Up resides in the documented which is not top frame, false otherwise
+ */
+const isForbidden = (self) => {
+    return self.isUserAgentExcluded ||
+    isUrlTriggerParamPresent(swipeUpOff, _win.get(self)) ||
+    inIframe()
+}
+
+/**
+ * As can be seen in default options - Swipe Up will try to use HTML5 FullScreen API if user-agent
+ * supports it, falling back to regular "swipe up" overlay otherwise. This, as well as any other options,
+ * can be turned-off at design or run-time (using URL param with the same name)
+ */
 export default class SwipeUp {
-    constructor(opts, windowObj = window) {
+    constructor(customOptions, windowObj = window) {
         if (!windowObj.document.body) {
             throw new Error('Swipe Up should be instantiated on window load when DOM is ready')
         }
         _win.set(this, windowObj)
-        _options.set(this, Object.assign(defaultOptions, opts))
         let win = _win.get(this)
+        _options.set(this, overrideOptions(defaultOptions, customOptions, win))
         let options = _options.get(this)
 
         //expose browser-ui-state and fscreen as part of swipe-up API
@@ -135,8 +78,8 @@ export default class SwipeUp {
         this.fscreen = this.browserUiState.fscreen
 
 
-        //Proceed to init DOM if not forbidden by excludedUserAgents option
-        if (!this.isUserAgentExcluded) {
+        //Proceed to init DOM if not forbidden
+        if (!isForbidden(this)) {
             let customCSS = options.customCSS
             let customCSSCleanSlate = options.customCSSCleanSlate
             let cssToApply = customCSSCleanSlate ? customCSS : SwipeUpCss + customCSS
@@ -214,6 +157,10 @@ export default class SwipeUp {
         this.isEnabled = true
         _win.get(this).localStorage.setItem(localStorageDisableKey, 'false')
         !this.isUserAgentExcluded ? showOrHide(this) : null
+    }
+
+    get appliedOptions() {
+        return _options.get(this)
     }
 
     showDebugWidget() {

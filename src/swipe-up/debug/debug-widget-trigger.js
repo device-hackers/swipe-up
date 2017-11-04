@@ -1,4 +1,5 @@
 import detectPassiveEvents from 'detect-passive-events';
+import {isUrlTriggerParamPresent} from '../utils/dom'
 
 const confirmDisableMessage = 'This will allow to disable Swipe Up on this browser. Select OK to disable.'
 const urlTriggerParam = 'debugInSwipeUp'
@@ -12,10 +13,7 @@ export default class DebugWidgetTrigger {
 
         this._shouldShowWidgetOnLoad = false
 
-        const isUrlTriggerParamPresent = (name) =>
-            new RegExp("[?&]" + name + "(?:$|=|&)", "i").test(win.location.search)
-
-        isUrlTriggerParamPresent(urlTriggerParam) ? this._shouldShowWidgetOnLoad = true : null
+        isUrlTriggerParamPresent(urlTriggerParam, win) ? this._shouldShowWidgetOnLoad = true : null
 
         let quickTapDetected = 0
         let timerId, bottomRightTouched, topLeftTouched3Times, bottomLeftTouched, topRightTouched3Times

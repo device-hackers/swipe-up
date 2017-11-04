@@ -25,8 +25,11 @@ export default class EmailButton extends ControlButton {
             let generatedLink =
                 `subject=[SwipeUp] ${deviceInfoToInclude}` +
                 `&body=${debugWidget.recordAllReadings.
-                    replace(/<b>|<\/b>|<span class='state'>|<\/span>/g, '')}\n` +
-                `${debugWidget.recordUserAgent}\n\n` +
+                    replace(/<b>|<\/b>|<u>|<\/u>/g, '').
+                    replace(/<br>/g, '\n')}\n` +
+                `${debugWidget.recordUserAgent}\n` +
+                `${debugWidget.recordSwipeUpOptions.
+                    replace(/<i>|<\/i>/g, '')}\n\n` +
                 `window.orientation : ${win.orientation}\n` +
                 `navigator.javaEnabled() : ${win.navigator.javaEnabled()}\n` +
                 `${navigatorInfo}`
