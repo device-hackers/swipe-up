@@ -36,10 +36,10 @@
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.6.1",
     "copy-webpack-plugin": "^4.2.0",
-    "cucumber": "^3.0.6",
+    "cucumber": "^3.1.0",
     "html-webpack-plugin": "^2.29.0",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
     "browser-ui-state": "^1.1.22",
