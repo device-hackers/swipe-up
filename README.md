@@ -87,6 +87,8 @@ swipeUp.isUserAgentExcluded//Boolean - Results of match for options.excludedUser
 
 swipeUp.disable()          //This and next one allows to control operational mode of SwipeUp, so you have
 swipeUp.enable()           //ability to "turn-on" and "off" SwipeUp functioning according to your needs
+swipeUp.appliedOptions     //Returns options JSON-object which has been applied by Swipe Up after merging 
+                           //all sources (default, constructor, URL)
 
 swipeUp.showDebugWidget()  //As it sounds - you can trigger debug widget appearing via API,
 swipeUp.hideDebugWidget()  //but it can be also displayed via case insensitive URL param "debugInSwipeUp",
