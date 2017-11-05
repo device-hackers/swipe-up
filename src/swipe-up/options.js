@@ -1,6 +1,4 @@
 import {overrideBoolean, overrideNumber, overrideRegExp, overrideString} from './utils/dom'
-import assign from 'es6-object-assign'
-assign.polyfill()
 
 /**
  * Set of default options which meant to be overridden by options provided to SwipeUp constructor.
