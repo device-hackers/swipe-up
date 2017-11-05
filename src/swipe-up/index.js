@@ -8,6 +8,7 @@ import $, {
     addRunTimeStyles, inIframe, isUrlTriggerParamPresent, overrideBoolean, overrideNumber, overrideString
 } from './utils/dom'
 import defaultOptions, {overrideOptions} from './options'
+import es6_weak_map_polyfill from 'es6-weak-map/implement'
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up

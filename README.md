@@ -110,6 +110,9 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 - [![gzipped size](http://img.badgesize.io/https://unpkg.com/es6-object-assign?compression=gzip)](https://unpkg.com/es6-object-assign) 
 [ECMAScript 6 Object.assign() polyfill](https://github.com/rubennorte/es6-object-assign) - ~40 lines of [code](https://github.com/rubennorte/es6-object-assign/blob/master/index.js) 
 used for UC and QQ browsers which still (Nov'17) doesn't support Object.assign
+- [![gzipped size](http://img.badgesize.io/https://unpkg.com/es6-weak-map?compression=gzip)](https://unpkg.com/es6-weak-map) 
+[ECMAScript 6 WeakMap polyfill](https://github.com/medikoo/es6-weak-map) - ~70 lines of [code](https://github.com/medikoo/es6-weak-map/blob/master/polyfill.js) 
+used for old Android Stock browsers and UC which still (Nov'17) doesn't support WeakMaps
 
 ## Matrix of supported devices and browsers
 See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State.
