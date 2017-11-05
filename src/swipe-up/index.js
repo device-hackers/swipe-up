@@ -62,6 +62,8 @@ const isForbidden = (self) => {
  * As can be seen in default options - Swipe Up will try to use HTML5 FullScreen API if user-agent
  * supports it, falling back to regular "swipe up" overlay otherwise. This, as well as any other options,
  * can be turned-off at design or run-time (using URL param with the same name)
+ * TODO UC EN 11.4.8 on S7 Edge reports that it supports HTML5 FullScreen API and it actually does,
+ * but once switched to it - it locks itself to landscape, so need wrap fscreen with blacklisting
  */
 export default class SwipeUp {
     constructor(customOptions, windowObj = window) {

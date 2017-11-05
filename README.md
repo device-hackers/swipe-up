@@ -106,6 +106,9 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 [Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md))
 - [Fscreen](https://github.com/rafrex/fscreen) - ~60 lines of [code](https://github.com/rafrex/fscreen/blob/master/src/index.js)
 (used for vendor agnostic access to the [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API))
+- [ECMAScript 6 Object.assign() polyfill](https://github.com/rubennorte/es6-object-assign) - ~40 lines of 
+[code](https://github.com/rubennorte/es6-object-assign/blob/master/index.js) used for UC and QQ browsers which 
+still (Nov'17) doesn't support Object.assign
 
 ## Matrix of supported devices and browsers
 See [Matrix](https://github.com/device-hackers/browser-ui-state/blob/master/docs/MATRIX.md) from Browser UI State.
