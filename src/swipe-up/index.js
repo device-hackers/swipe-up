@@ -61,6 +61,14 @@ const isForbidden = (self) => {
 }
 
 /**
+ * Some old bad user-agents doesn't fire resize when URL bar gets shown or hidden, that's why they need extra scroll
+ * handler
+ * @param userAgent - window.navigator.userAgent string
+ */
+const isUserAgentNotFiringResize = (userAgent) =>
+    /(?:Lenovo.A850.*Version\/|Lenovo.A889.*Browser\/)/i.test(userAgent)
+
+/**
  * As can be seen in default options - Swipe Up will try to use HTML5 FullScreen API if user-agent
  * supports it, falling back to regular "swipe up" overlay otherwise. This, as well as any other options,
  * can be turned-off at design or run-time (using URL param with the same name)
@@ -134,9 +142,11 @@ export default class SwipeUp {
             win.addEventListener('optimizedResize', resizeHandler)
             win.addEventListener('optimizedOrientationchange', resizeHandler)
 
-            //TODO make optional for Android Stock + disable options.scrollWindowToTopOnShow
-            /*new EventThrottle('scroll', 'optimizedScroll', win)
-            win.addEventListener('optimizedScroll', resizeHandler)*/
+            if (isUserAgentNotFiringResize(win.navigator.userAgent)) {
+                options.scrollWindowToTopOnShow = false //see explanation in options.js
+                new EventThrottle('scroll', 'optimizedScroll', win)
+                win.addEventListener('optimizedScroll', resizeHandler)
+            }
         }
     }
 
