@@ -31,7 +31,8 @@ export default {
 
     /**
      * If set to true will make window scroll to top whenever Swipe Up is triggering its showing.
-     * TODO this param may be incompatible if to add scroll and touchmove handlers to Swipe Up
+     * Warning! This param is incompatible with old Android Stock browsers who require to add extra scroll handlers
+     * on Swipe Up, which will collide with this param's behavior. Thus this param will be forced to false in such browsers.
      * @type {boolean}
      * @default false
      */

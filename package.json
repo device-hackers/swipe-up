@@ -44,6 +44,7 @@
   "dependencies": {
     "browser-ui-state": "^1.1.22",
     "chai": "^4.1.2",
+    "custom-event-polyfill": "^0.3.0",
     "detect-passive-events": "^1.0.4",
     "es6-object-assign": "^1.1.0",
     "es6-weak-map": "^2.0.2"
