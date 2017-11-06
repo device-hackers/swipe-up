@@ -10,7 +10,6 @@ import $, {
 import defaultOptions, {overrideOptions} from './options'
 import es6_weak_map_polyfill from 'es6-weak-map/implement'
 import es6_object_assign_polyfill from 'es6-object-assign/auto'
-import custom_event_polyfill from 'custom-event-polyfill/custom-event-polyfill'
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up
