@@ -111,6 +111,8 @@ where Swipe Up may prevent product usage due to not yet supported browser or new
 - [![gzipped size](http://img.badgesize.io/https://unpkg.com/fscreen?compression=gzip)](https://unpkg.com/fscreen) 
 [Fscreen](https://github.com/rafrex/fscreen) - ~60 lines of [code](https://github.com/rafrex/fscreen/blob/master/src/index.js)
 (used for vendor agnostic access to the [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API))
+
+Polyfills:
 - [![gzipped size](http://img.badgesize.io/https://unpkg.com/es6-object-assign?compression=gzip)](https://unpkg.com/es6-object-assign) 
 [ECMAScript 6 Object.assign() polyfill](https://github.com/rubennorte/es6-object-assign) - ~40 lines of [code](https://github.com/rubennorte/es6-object-assign/blob/master/index.js) 
 used for UC and QQ browsers which still (Nov'17) doesn't support Object.assign
