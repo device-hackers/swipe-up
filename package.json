@@ -42,7 +42,7 @@
     "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
-    "browser-ui-state": "^1.1.23",
+    "browser-ui-state": "^1.1.24",
     "chai": "^4.1.2",
     "detect-passive-events": "^1.0.4",
     "es6-object-assign": "^1.1.0",
