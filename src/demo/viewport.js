@@ -1229,7 +1229,7 @@ var Viewport = (function() {
         setViewport: function(scale) {
             this.scale = scale; //for backward compatibility with Hub
             createViewport("user-scalable=no, " +
-                "initial-scale=" + scale + ", maximum-scale=" + scale + ", minimum-scale=" + scale);
+                "initial-scale=" + scale + ", maximum-scale=" + scale + ", minimum-scale=" + scale + ", viewport-fit=cover");
         },
 
         /**
