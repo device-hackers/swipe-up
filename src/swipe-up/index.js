@@ -44,7 +44,10 @@ const showOrHide = (self) => {
 const fixateRootElementsIfNeeded = (self) => {
     if (_options.get(self).fixateRootElementsOnInit) {
         let rootElements = _win.get(self).document.body.children
-        Array.from(rootElements).forEach((element) => element.style.position = 'fixed')
+        //Because Array.from doesn't supported in Android Stock Browsers
+        for (let i = 0; i < document.body.children.length; i++) {
+            document.body.children[i].style.position = 'fixed'
+        }
     }
 }
 
