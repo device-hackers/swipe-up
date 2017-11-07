@@ -10,6 +10,7 @@ import $, {
 import defaultOptions, {overrideOptions} from './options'
 import es6_weak_map_polyfill from 'es6-weak-map/implement'
 import es6_object_assign_polyfill from 'es6-object-assign/auto'
+import Detection from "./utils/detection"
 
 //Private scope
 const localStorageDisableKey = 'SwipeUp._disabled' //Used for debugging purposes to allow disabling swipe up
@@ -64,14 +65,6 @@ const isForbidden = (self) => {
 }
 
 /**
- * Some old bad user-agents doesn't fire resize when URL bar gets shown or hidden, that's why they need extra scroll
- * handler
- * @param userAgent - window.navigator.userAgent string
- */
-const isUserAgentNotFiringResize = (userAgent) =>
-    /(?:Lenovo.A850.*\WVersion\/|Lenovo.A889.*\WBrowser\/|\WGT-P5100.*\WVersion\/)/i.test(userAgent)
-
-/**
  * As can be seen in default options - Swipe Up will try to use HTML5 FullScreen API if user-agent
  * supports it, falling back to regular "swipe up" overlay otherwise. This, as well as any other options,
  * can be turned-off at design or run-time (using URL param with the same name)
@@ -104,6 +97,10 @@ export default class SwipeUp {
             let useHtml5FullScreen = options.useHtml5FullScreenWhenPossible && this.fscreen.fullscreenEnabled
             if (!useHtml5FullScreen) {
                 fixateRootElementsIfNeeded(this)
+
+                //TODO rework this. This is for Android Stock browsers which doesn't support vh units
+                Detection.isUserAgentNotFiringResize(win.navigator.userAgent) ?
+                    options.expandBodyHeightTo = '150%' : null
 
                 //Required for Safari portrait
                 options.addImportantToBodyHeight ?
@@ -145,7 +142,7 @@ export default class SwipeUp {
             win.addEventListener('optimizedResize', resizeHandler)
             win.addEventListener('optimizedOrientationchange', resizeHandler)
 
-            if (isUserAgentNotFiringResize(win.navigator.userAgent)) {
+            if (Detection.isUserAgentNotFiringResize(win.navigator.userAgent)) {
                 options.scrollWindowToTopOnShow = false //see explanation in options.js
                 new EventThrottle('scroll', 'optimizedScroll', win)
                 win.addEventListener('optimizedScroll', resizeHandler)
