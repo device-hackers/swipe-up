@@ -55,7 +55,7 @@ export default class DebugWidget {
         const screenDimensions = this._win.screen.width + 'x' + this._win.screen.height
         const windowDimensions = this._win.innerWidth + 'x' + this._win.innerHeight
 
-        const screenType = this._win.screen.orientation ?
+        const screenType = this._win.screen.orientation && this._win.screen.orientation.type ?
             this._win.screen.orientation.type.replace(/(.).*-(.).*/, '$1$2') : '-'
 
         const orientation = this._browserUiState.orientation[0]
