@@ -66,7 +66,7 @@ const isForbidden = (self) => {
  * @param userAgent - window.navigator.userAgent string
  */
 const isUserAgentNotFiringResize = (userAgent) =>
-    /(?:Lenovo.A850.*Version\/|Lenovo.A889.*Browser\/)/i.test(userAgent)
+    /(?:Lenovo.A850.*\WVersion\/|Lenovo.A889.*\WBrowser\/|\WGT-P5100.*\WVersion\/)/i.test(userAgent)
 
 /**
  * As can be seen in default options - Swipe Up will try to use HTML5 FullScreen API if user-agent

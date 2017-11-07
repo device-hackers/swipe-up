@@ -73,7 +73,7 @@ export default {
      * Must have trick for SPAs with no scrollable content to make body height bigger to force correct URL bar hiding.
      * Required at least for Safari, otherwise URL bar will appear back again right after swiping up.
      * @type {string}
-     * @default '100vh'
+     * @default '110vh'
      */
     expandBodyHeightTo: '110vh',
 
