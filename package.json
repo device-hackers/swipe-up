@@ -1,6 +1,6 @@
 {
   "name": "swipe-up",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "Reference 'Swipe Up' functionality implementation based on 'Browser Ui State' intended to provide a way to expand browser to full screen state",
   "main": "dist/swipe-up.js",
   "module": "dist/swipe-up.js",
