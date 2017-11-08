@@ -94,7 +94,15 @@ export default class SwipeUp {
 
             addRunTimeStyles(cssToApply + DebugWidgetCss, win)
 
-            let useHtml5FullScreen = options.useHtml5FullScreenWhenPossible && this.fscreen.fullscreenEnabled
+            //TODO refactor below
+            let userAgent = win.navigator.userAgent
+            let isLGG3 = /(?:LG.(?:D855|D850|D851|D852))/i.test(userAgent)
+            let isUcBrowser = /\WUCBrowser/i.test(userAgent)
+
+            let useHtml5FullScreen = options.useHtml5FullScreenWhenPossible &&
+                                    this.fscreen.fullscreenEnabled &&
+                                    !isLGG3 && !isUcBrowser
+
             if (!useHtml5FullScreen) {
                 fixateRootElementsIfNeeded(this)
 
