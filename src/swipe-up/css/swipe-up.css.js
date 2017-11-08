@@ -17,7 +17,7 @@ export default `
 
 .fixedFlexBox {
     position: fixed;
-    display: flex;
+    display: table;
     align-items: center;
     width: 100%;
     height: 140%; /* this and below are needed for Safari portrait otherwise there will be a 'gap' after swipe up */
@@ -28,5 +28,7 @@ export default `
 
 .content {
     width: 100%;
+    display: table-cell;
+    vertical-align: middle;
 }
 `
