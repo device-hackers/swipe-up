@@ -14,7 +14,7 @@
     "test": "./node_modules/.bin/cucumber.js --compiler js:babel-core/register",
     "prepare": "npm run build",
     "deploy-stage": "npm version patch -m '[version] air-pm %s'",
-    "tmp_postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags"
   },
   "author": "Andriy Halyasovskyy (https://github.com/TheBit)",
   "contributors": [
