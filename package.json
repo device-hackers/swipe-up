@@ -12,7 +12,8 @@
     "start": "webpack-dev-server",
     "build": "webpack -p && npm run test",
     "test": "./node_modules/.bin/cucumber.js --compiler js:babel-core/register",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "tmp_postversion": "git push && git push --tags"
   },
   "author": "Andriy Halyasovskyy (https://github.com/TheBit)",
   "contributors": [
